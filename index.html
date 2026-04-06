@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biswadeep Chakraborty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1714;
+  --paper: #f5f0e8;
+  --paper-deep: #ebe4d6;
+  --accent: #c4501a;
+  --accent-light: #e8a87c;
+  --muted: #8a8279;
+  --muted-light: #b8b0a4;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'Instrument Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- GRAIN OVERLAY --- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* --- NAV --- */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.25rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.4s, backdrop-filter 0.4s;
+}
+
+nav.scrolled {
+  border-bottom-color: var(--muted-light);
+  background: rgba(245, 240, 232, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.nav-name {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after { width: 100%; }
+
+/* --- HERO --- */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 2.5rem;
+  padding-top: 5rem;
+  align-items: center;
+  gap: 3rem;
+}
+
+.hero-text {
+  max-width: 560px;
+}
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero-label::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.75rem;
+  color: var(--ink);
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-desc {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 440px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.9rem 1.75rem;
+  border: 1.5px solid var(--ink);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-cta:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.hero-cta svg {
+  transition: transform 0.35s;
+}
+.hero-cta:hover svg {
+  transform: translateX(4px);
+}
+
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-card {
+  width: 340px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 2.5rem;
+  position: relative;
+  transform: rotate(2deg);
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border: 1px solid var(--muted-light);
+  transform: rotate(-1deg);
+  pointer-events: none;
+}
+
+.hero-card-top {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-light);
+  margin-bottom: 2rem;
+}
+
+.hero-card h3 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.hero-card p {
+  font-size: 0.85rem;
+  color: var(--muted-light);
+  line-height: 1.6;
+}
+
+.hero-card-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  margin: 1.5rem 0;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.hero-stat-num {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--accent-light);
+}
+
+.hero-stat-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted-light);
+  margin-top: 0.15rem;
+}
+
+/* --- SECTION SHARED --- */
+.section {
+  padding: 7rem 2.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.section-num {
+  font-family: var(--serif);
+  font-size: 3.5rem;
+  color: var(--paper-deep);
+  line-height: 1;
+  user-select: none;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--muted-light);
+}
+
+/* --- ABOUT --- */
+.about {
+  border-top: 1px solid var(--muted-light);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.about-text p {
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+.about-text p:first-child::first-letter {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  float: left;
+  line-height: 1;
+  margin-right: 0.5rem;
+  margin-top: 0.15rem;
+  color: var(--accent);
+}
+
+.about-aside {
+  border-left: 1px solid var(--muted-light);
+  padding-left: 2.5rem;
+}
+
+.about-aside-title {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.interest-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--muted-light);
+  margin: 0.25rem 0.25rem;
+  color: var(--ink);
+  transition: all 0.3s;
+  cursor: default;
+}
+
+.interest-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.about-languages {
+  margin-top: 2.5rem;
+}
+
+.lang-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--paper-deep);
+  font-size: 0.88rem;
+}
+
+.lang-level {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* --- EXPERIENCE --- */
+.experience {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.experience .section-num { color: #2a2520; }
+.experience .section-line { background: #3a352f; }
+
+.exp-timeline {
+  position: relative;
+  padding-left: 3rem;
+}
+
+.exp-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+}
+
+.exp-item {
+  position: relative;
+  padding-bottom: 4rem;
+}
+
+.exp-item:last-child { padding-bottom: 0; }
+
+.exp-dot {
+  position: absolute;
+  left: -3rem;
+  top: 0.35rem;
+  width: 9px;
+  height: 9px;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateX(-4px);
+}
+
+.exp-dot::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.4;
+}
+
+.exp-where {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-light);
+  margin-bottom: 0.5rem;
+}
+
+.exp-role {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  margin-bottom: 0.35rem;
+  line-height: 1.25;
+}
+
+.exp-date {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.exp-desc {
+  font-size: 0.92rem;
+  color: var(--muted-light);
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+.exp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.exp-tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #3a352f;
+  color: var(--muted-light);
+}
+
+/* --- PROJECTS / WORK --- */
+.work {
+  border-top: 1px solid var(--muted-light);
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.work-card {
+  padding: 2.5rem;
+  border: 1px solid var(--muted-light);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.work-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.work-card:hover::before { transform: scaleX(1); }
+.work-card:hover { border-color: var(--accent); }
+
+.work-card-num {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  color: var(--paper-deep);
+  margin-bottom: 1.25rem;
+  line-height: 1;
+}
+
+.work-card h3 {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.work-card p {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.work-card-meta {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+/* --- HONORS --- */
+.honors {
+  background: var(--paper-deep);
+}
+
+.honors-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--muted-light);
+}
+
+.honor-item {
+  background: var(--paper-deep);
+  padding: 2rem 2.25rem;
+  transition: background 0.3s;
+}
+
+.honor-item:hover {
+  background: var(--paper);
+}
+
+.honor-icon {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.honor-item h3 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.honor-item p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* --- EDUCATION --- */
+.education {
+  border-top: 1px solid var(--muted-light);
+}
+
+.edu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.edu-item {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 3rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--paper-deep);
+  align-items: baseline;
+}
+
+.edu-year {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.edu-school {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  margin-bottom: 0.25rem;
+}
+
+.edu-detail {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* --- CONTACT --- */
+.contact {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  padding: 8rem 2.5rem;
+}
+
+.contact-pre {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent-light);
+  margin-bottom: 1.5rem;
+}
+
+.contact h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.contact p {
+  color: var(--muted);
+  max-width: 440px;
+  margin: 0 auto 2.5rem;
+  font-size: 0.95rem;
+}
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--paper);
+  text-decoration: none;
+  padding: 0.85rem 1.5rem;
+  border: 1px solid #3a352f;
+  transition: all 0.3s;
+}
+
+.contact-link:hover {
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+/* --- FOOTER --- */
+footer {
+  background: var(--ink);
+  border-top: 1px solid #2a2520;
+  padding: 2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer span {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* --- ANIMATIONS --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger children */
+.stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+.stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+.stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+.stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+.stagger > .reveal:nth-child(5) { transition-delay: 0.35s; }
+.stagger > .reveal:nth-child(6) { transition-delay: 0.4s; }
+
+/* --- MOBILE --- */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.25rem; }
+  .nav-links { gap: 1rem; }
+  .nav-links a { font-size: 0.65rem; }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 0 1.25rem;
+    padding-top: 6rem;
+    min-height: auto;
+    padding-bottom: 4rem;
+  }
+
+  .hero-visual { order: -1; justify-content: flex-start; }
+  .hero-card { width: 100%; max-width: 340px; transform: rotate(1deg); }
+
+  .section { padding: 4rem 1.25rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .about-aside { border-left: none; padding-left: 0; border-top: 1px solid var(--muted-light); padding-top: 2rem; }
+  .work-grid { grid-template-columns: 1fr; }
+  .edu-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  .contact { padding: 5rem 1.25rem; }
+  footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 2.2rem; }
+  .section-num { font-size: 2.5rem; }
+  .section-title { font-size: 1.5rem; }
+  .nav-links { gap: 0.65rem; }
+  .hero-stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-name">B. Chakraborty</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-label">CS Undergraduate · IISER Bhopal</div>
+    <h1 class="hero-title">I study how <em>machines</em> and <em>humans</em> make decisions together.</h1>
+    <p class="hero-desc">Third-year Computer Science student interested in human–AI interaction, intelligent systems that matter, and the occasional kitchen experiment gone right.</p>
+    <a href="#work" class="hero-cta">
+      See my work
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-card-top">Currently exploring</div>
+      <h3>LLMs for Human Decision-Making</h3>
+      <p>How large language models can augment — not replace — how we think, plan, and choose.</p>
+      <div class="hero-card-divider"></div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">2</div>
+          <div class="hero-stat-label">Research Internships</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label">National Awards</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about section" id="about">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Growing up in Naharlagun, a small town in Arunachal Pradesh, I didn't have the typical CS kid story. No coding bootcamps at twelve, no startup garage. What I had was curiosity — about how things work, why people make the choices they do, and what happens when you mix the right spices in the wrong order.</p>
+      <p>That curiosity led me to IISER Bhopal, where I study Computer Science and spend my time thinking about the messy space between algorithms and real human behavior. My research sits at the intersection of human–AI interaction, optimization, and socially relevant computing. I've worked on drone surveillance scheduling, trajectory prediction models, and geospatial inference using LLMs — but what really drives me is the question underneath: how do we build systems that genuinely help people think better?</p>
+      <p>When I'm not debugging code or reading papers, you'll probably find me experimenting with a new recipe, writing for fun, or disappearing into a travel magazine. I co-founded "Be the Voice" back in school — a small attempt to do something useful. I still carry that impulse.</p>
+    </div>
+    <div class="about-aside reveal">
+      <div class="about-aside-title">Things I think about</div>
+      <div style="margin-bottom: 1.5rem;">
+        <span class="interest-tag">Human–AI Interaction</span>
+        <span class="interest-tag">Game Theory</span>
+        <span class="interest-tag">Optimization</span>
+        <span class="interest-tag">LLMs</span>
+        <span class="interest-tag">Deep Generative Models</span>
+        <span class="interest-tag">Trajectory Prediction</span>
+        <span class="interest-tag">Geospatial Systems</span>
+        <span class="interest-tag">Cooking</span>
+        <span class="interest-tag">Travel Writing</span>
+      </div>
+
+      <div class="about-languages">
+        <div class="about-aside-title">Languages</div>
+        <div class="lang-item"><span>Bengali</span><span class="lang-level">Native</span></div>
+        <div class="lang-item"><span>Hindi</span><span class="lang-level">Native</span></div>
+        <div class="lang-item"><span>English</span><span class="lang-level">Professional</span></div>
+        <div class="lang-item"><span>Assamese</span><span class="lang-level">Working</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience section" id="experience">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title" style="color: var(--paper)">Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="exp-timeline stagger">
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-where">IIT Mandi · Research Intern</div>
+      <div class="exp-role">Drone Surveillance & Trajectory Prediction</div>
+      <div class="exp-date">Jun 2025 – Jul 2025 · Mandi, HP</div>
+      <div class="exp-desc">Under Dr. Dinesh Singh, I tackled two problems. First: scheduling drone patrols to minimize flight time — I implemented ILP, Greedy, Simulated Annealing, and a novel Multi-Stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal). Second: multi-agent trajectory prediction using the Trajectron model with CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY datasets. Both projects sharpened how I think about optimization under real constraints.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">PyTorch</span>
+        <span class="exp-tag">ILP</span>
+        <span class="exp-tag">CVAEs</span>
+        <span class="exp-tag">Simulated Annealing</span>
+        <span class="exp-tag">Spatiotemporal Graphs</span>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-where">IIT Bhubaneswar · Research Intern</div>
+      <div class="exp-role">Geospatial Knowledge Inference with LLMs</div>
+      <div class="exp-date">Dec 2024 – Jan 2025 · Bhubaneswar, Odisha</div>
+      <div class="exp-desc">Worked with Dr. Shreya Ghosh on using LLMs to enhance travel decision-making. Built data pipelines — web scraping with Playwright, geospatial data via Geopy, flight data through Google Flights integration. The messy, unglamorous work of making AI actually useful: cleaning data, wrangling APIs, and figuring out what questions to even ask.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">LLMs</span>
+        <span class="exp-tag">Playwright</span>
+        <span class="exp-tag">Geopy</span>
+        <span class="exp-tag">Web Scraping</span>
+        <span class="exp-tag">Data Engineering</span>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-where">Be the Voice · Co-Founder</div>
+      <div class="exp-role">Community Initiative</div>
+      <div class="exp-date">Jul 2020 – Dec 2021 · Naharlagun, Arunachal Pradesh</div>
+      <div class="exp-desc">Co-founded a community initiative during my school years. The idea was simple: use whatever platform we had to give voice to things that mattered. It taught me more about real-world coordination than any algorithm ever has.</div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-dot"></div>
+      <div class="exp-where">IISER Bhopal · Extracurriculars</div>
+      <div class="exp-role">Quiz Club · Poetry Club · Animal Welfare Society</div>
+      <div class="exp-date">2024 – Present</div>
+      <div class="exp-desc">Core committee member of the Quiz Club and Poetry Club. Previously on the content team for the Animal Welfare Society. These aren't side activities for me — they're where I practice thinking in different registers.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WORK / PROJECTS -->
+<section class="work section" id="work">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Research & Projects</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="work-grid stagger">
+
+    <div class="work-card reveal">
+      <div class="work-card-num">01</div>
+      <h3>Multi-Stage Drone Surveillance Scheduling</h3>
+      <p>Designed and evaluated a novel Multi-Stage algorithmic framework for minimizing drone flight time under patrol interval constraints. Tested on real-world university campus maps, achieving high area coverage with significantly lower runtime than traditional approaches.</p>
+      <div class="work-card-meta">Optimization · ILP · Simulated Annealing</div>
+    </div>
+
+    <div class="work-card reveal">
+      <div class="work-card-num">02</div>
+      <h3>Trajectron: Multi-Agent Trajectory Prediction</h3>
+      <p>Implemented a graph-based deep generative model using Conditional VAEs and dynamic spatiotemporal graphs for predicting pedestrian trajectories. Evaluated on ETH/UCY benchmarks — outperformed baselines like Social GAN on ADE, FDE, and NLL metrics.</p>
+      <div class="work-card-meta">Deep Learning · CVAEs · PyTorch</div>
+    </div>
+
+    <div class="work-card reveal">
+      <div class="work-card-num">03</div>
+      <h3>Geospatial LLM Inference for Travel</h3>
+      <p>Built the data backbone for an LLM-powered travel decision system — scraping flight data, curating geospatial datasets for Indian destinations, integrating APIs. The kind of infrastructure work that makes "AI-powered" tools actually function.</p>
+      <div class="work-card-meta">LLMs · Data Engineering · Geospatial</div>
+    </div>
+
+    <div class="work-card reveal">
+      <div class="work-card-num">04</div>
+      <h3>Be the Voice</h3>
+      <p>A community platform co-founded during high school to amplify underrepresented perspectives in Arunachal Pradesh. Not a tech project — a people project. Ran for 18 months and taught me that the hardest problems aren't computational.</p>
+      <div class="work-card-meta">Community · Leadership · Communication</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HONORS -->
+<section class="honors section" id="honors">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Honors & Awards</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="honors-list reveal">
+    <div class="honor-item">
+      <div class="honor-icon">✦</div>
+      <h3>NYU Class of 2026 Acceptance</h3>
+      <p>Admitted to New York University — a validation of academic rigor and a reminder that options exist.</p>
+    </div>
+    <div class="honor-item">
+      <div class="honor-icon">✦</div>
+      <h3>Dera Natung Award</h3>
+      <p>Awarded for academic excellence — named after a figure who represents dedication to Arunachal's progress.</p>
+    </div>
+    <div class="honor-item">
+      <div class="honor-icon">✦</div>
+      <h3>State Merit Scholarship</h3>
+      <p>Recognized at the state level for consistent academic performance throughout school.</p>
+    </div>
+    <div class="honor-item">
+      <div class="honor-icon">✦</div>
+      <h3>National Means Cum Merit Scholarship</h3>
+      <p>A national-level scholarship combining academic merit with means assessment. One of the early signals that said: keep going.</p>
+    </div>
+    <div class="honor-item">
+      <div class="honor-icon">✦</div>
+      <h3>NTSE Stage I</h3>
+      <p>Cleared the first stage of the National Talent Search Examination — the scholarship that every Indian student's parents know about.</p>
+    </div>
+    <div class="honor-item">
+      <div class="honor-icon">✦</div>
+      <h3>Summer Analytics 2024</h3>
+      <p>Completed a structured analytics program covering statistical methods and data science fundamentals.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="education section" id="education">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Education</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-items">
+    <div class="edu-item reveal">
+      <div class="edu-year">2023 – 2027</div>
+      <div>
+        <div class="edu-school">IISER Bhopal</div>
+        <div class="edu-detail">BS in Computer Science and Engineering</div>
+      </div>
+    </div>
+    <div class="edu-item reveal">
+      <div class="edu-year">2020 – 2022</div>
+      <div>
+        <div class="edu-school">Vivekananda Kendra Vidyalaya, Nirjuli</div>
+        <div class="edu-detail">Higher Secondary · Arunachal Pradesh</div>
+      </div>
+    </div>
+    <div class="edu-item reveal">
+      <div class="edu-year">2010 – 2020</div>
+      <div>
+        <div class="edu-school">Vivekananda Kendra Vidyalaya, Nirjuli</div>
+        <div class="edu-detail">Schooling · Arunachal Pradesh</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-pre reveal">Let's talk</div>
+  <h2 class="reveal">I'm always up for a good conversation.</h2>
+  <p class="reveal">Whether it's about research collaboration, a project idea, or just a recipe recommendation — I'd love to hear from you.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:biswadeepch11@gmail.com" class="contact-link">Email</a>
+    <a href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener" class="contact-link">LinkedIn</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Biswadeep Chakraborty</span>
+  <span>Built with intention, not a template.</span>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
