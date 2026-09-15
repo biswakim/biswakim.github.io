@@ -389,8 +389,7 @@ body {
 .exp-item:last-child { border-bottom: 1px solid var(--paper-edge); }
 
 .exp-meta { grid-column: 1 / 4; }
-.exp-body { grid-column: 4 / 11; }
-.exp-item:nth-child(even) .exp-body { grid-column: 5 / 12; }
+.exp-body { grid-column: 4 / 12; }
 
 .exp-where {
   font-family: var(--mono);
@@ -504,6 +503,12 @@ body {
   color: var(--accent);
   margin-top: auto;
 }
+
+/* ============ BEYOND RESEARCH ============ */
+.extracurricular { background: var(--paper); }
+.extracurricular .wk.feature { border-top-color: var(--accent); }
+.extracurricular .wk.side { border-top-color: var(--accent); }
+.extracurricular .wk h3 { margin-bottom: 0.85rem; }
 
 /* ============ TOOLKIT ============ */
 .toolkit { background: var(--ink); color: var(--paper); }
@@ -651,7 +656,6 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
   .topnav ul { gap: 1rem; }
 
   .about-body, .medium-link, .about-side, .exp-meta, .exp-body,
-  .exp-item:nth-child(even) .exp-body,
   .tk-grid, .rec-left, .rec-right,
   .wk.feature, .wk.side, .wk.third, .wk.wide, .wk.wide-2 { grid-column: 1 / -1; }
 
@@ -766,7 +770,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
 <section class="sec grid12 experience" id="experience">
   <div class="sec-head">
     <div class="sec-mark">02 / Experience</div>
-    <h2 class="sec-title">Research Experince</h2>
+    <h2 class="sec-title">Research Experience</h2>
     <div class="sec-rule"></div>
   </div>
 
@@ -777,7 +781,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       <span class="exp-live">Most recent</span>
     </div>
     <div class="exp-body">
-      <h3 class="exp-role">Heterogenous Transformer Fusion Along Statistical Manifolds : A Bures-Wasserstein Approach</h3>
+      <h3 class="exp-role">Heterogeneous Transformer Fusion Along Statistical Manifolds : A Bures-Wasserstein Approach</h3>
       <p class="exp-desc">Dept. of Computer Science and Information Engineering.The work develops a multi-scale fusion pipeline and, more importantly, examines which component actually drives its performance. Through an analytical study of Wasserstein barycentric interpolation under the Bures metric, I show that the fused weights depend on distributional statistics that are invariant to row permutations, meaning that permutation alignment is not the mechanism responsible for the observed gains. Experiments across multiple alignment settings support this finding: hard permutation alignment is statistically indistinguishable from no alignment, while replacing Bures interpolation with Euclidean interpolation substantially degrades zero-shot fusion performance. The results suggest that, in this setting, the benefit of Optimal Transport based fusion comes from distributional matching of weight statistics rather than resolving permutation symmetry.</p>
       <div class="exp-tags">
         <span class="exp-tag">Optimal Transport</span>
@@ -822,6 +826,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       </div>
     </div>
   </article>
+</section>
 
 <!-- ================= WORK ================= -->
 <section class="sec grid12" id="work">
@@ -841,7 +846,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
 <article class="wk wide rv">
       <div class="wk-top"><span>03 / NCCU Taiwan</span></div>
       <h3>Multi-Scale Optimal Transport Transformer Fusion</h3>
-      <p>Fusing heterogeneous Vision Transformers by formulating model fusion as computational graph alignment. Fused Gromov–Wasserstein transport handles the macro structure, Wasserstein barycentric synthesis resolves the 6-vs-12-layer depth mismatch without heuristic identity padding, and Sinkhorn alignment handles parameters. 49.74% on CIFAR-100 after 15 fine-tuning epochs , past both parent models.</p>
+      <p>Investigating why Optimal Transport based fusion works when combining heterogeneous Vision Transformers with different depths. The work analyses Wasserstein barycentric interpolation under the Bures metric and shows that, in this setting, the fused weights depend on distributional statistics that are invariant to row permutations. Experiments indicate that the benefit comes from distributional matching of weight statistics rather than resolving permutation symmetry.</p>
       <div class="wk-meta">Optimal Transport · FGW · Sinkhorn</div>
     </article>
 
@@ -875,10 +880,50 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
   </div>
 </section>
 
+
+<!-- ================= BEYOND RESEARCH ================= -->
+<section class="sec grid12 extracurricular" id="extracurricular">
+  <div class="sec-head">
+    <div class="sec-mark">04 / Beyond Research</div>
+    <h2 class="sec-title">Outside the lab</h2>
+    <div class="sec-rule"></div>
+  </div>
+
+  <div class="work-grid">
+    <article class="wk feature rv">
+      <div class="wk-top"><span>01 / NGO</span></div>
+      <h3>Be the Voice</h3>
+      <p>Co-founded during school to support stray animals across the Itanagar capital region through feeding, medical treatment, adoption and abuse reporting. The experience taught me that meaningful problem-solving is often about people, coordination and persistence rather than technology alone.</p>
+      <div class="wk-meta">Community · Leadership · Social Impact</div>
+    </article>
+
+    <article class="wk side rv">
+      <div class="wk-top"><span>02 / Leadership</span></div>
+      <h3>NEVISTA</h3>
+      <p>Community and organisational work focused on contributing beyond academic and research settings, developing leadership, coordination and execution skills.</p>
+      <div class="wk-meta">Leadership · Community</div>
+    </article>
+
+    <article class="wk wide rv">
+      <div class="wk-top"><span>03 / Convenor</span></div>
+      <h3>Student &amp; Community Initiatives</h3>
+      <p>Involved in organising and coordinating student initiatives, working across people and responsibilities to turn ideas into functioning activities.</p>
+      <div class="wk-meta">Organisation · Coordination</div>
+    </article>
+
+    <article class="wk wide-2 rv">
+      <div class="wk-top"><span>04 / Writing</span></div>
+      <h3>Writing &amp; Personal Essays</h3>
+      <p>I write about places, memory, culture and the fragments of everyday life that stay with us. My Medium writing sits alongside my technical work as a more personal record of how I think.</p>
+      <div class="wk-meta">Writing · Culture · Reflection</div>
+    </article>
+  </div>
+</section>
+
 <!-- ================= TOOLKIT ================= -->
 <section class="sec grid12 toolkit" id="toolkit">
   <div class="sec-head">
-    <div class="sec-mark">04 / Toolkit</div>
+    <div class="sec-mark">05 / Toolkit</div>
     <h2 class="sec-title" style="color: var(--paper)">What I work with</h2>
     <div class="sec-rule"></div>
   </div>
@@ -913,7 +958,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
 <!-- ================= RECORD ================= -->
 <section class="sec grid12" id="record">
   <div class="sec-head">
-    <div class="sec-mark">05 / Record</div>
+    <div class="sec-mark">06 / Record</div>
     <h2 class="sec-title">Awards &amp; education</h2>
     <div class="sec-rule"></div>
   </div>
@@ -959,7 +1004,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
 
 <!-- ================= CONTACT ================= -->
 <section class="contact" id="contact">
-  <div class="contact-pre rv">06 / Contact</div>
+  <div class="contact-pre rv">07 / Contact</div>
   <h2 class="rv">I'm always up for a <em>good conversation</em>.</h2>
   <p class="contact-note rv">Whether it's about research collaboration, a project idea, or just a recipe recommendation , I'd love to hear from you.</p>
   <div class="contact-links rv">
@@ -984,7 +1029,8 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
     { id: 'work',       label: 'Projects',   idx: '03' },
     { id: 'toolkit',    label: 'Toolkit',    idx: '04' },
     { id: 'record',     label: 'Record',     idx: '05' },
-    { id: 'contact',    label: 'Contact',    idx: '06' }
+    { id: 'extracurricular', label: 'Beyond Research', idx: '06' },
+    { id: 'contact',    label: 'Contact',    idx: '07' }
   ];
 
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1025,7 +1071,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
         nodes.push(mk(W * 0.44, lerp(H * 0.24, H * 0.80, i / (HID - 1)), 5.5, 1, 'hid'));
       }
       for (i = 0; i < SECTIONS.length; i++) {
-        nodes.push(mk(W * 0.70, lerp(H * 0.17, H * 0.87, i / (SECTIONS.length - 1)), 7, 2, 'out'));
+        nodes.push(mk(W * 0.70, lerp(H * 0.13, H * 0.91, i / (SECTIONS.length - 1)), 7, 2, 'out'));
       }
     } else {
       nodes.push(mk(W * 0.5, H * 0.13, 9, 0, 'in'));
@@ -1034,7 +1080,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       }
       for (i = 0; i < SECTIONS.length; i++) {
         var col = i % 2, row = Math.floor(i / 2);
-        nodes.push(mk(col === 0 ? W * 0.27 : W * 0.73, lerp(H * 0.47, H * 0.70, row / 2), 6.5, 2, 'out'));
+        nodes.push(mk(col === 0 ? W * 0.27 : W * 0.73, lerp(H * 0.44, H * 0.76, row / 3), 6.5, 2, 'out'));
       }
     }
 
@@ -1077,7 +1123,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       });
     }
     if (!caps.length) {
-      ['input', 'hidden', 'sections'].forEach(function (txt) {
+      ['input', 'hidden', 'outputs'].forEach(function (txt) {
         var c = document.createElement('span');
         c.className = 'layer-cap';
         c.textContent = txt;
