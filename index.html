@@ -4,33 +4,76 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Biswadeep Chakraborty</title>
-<meta name="description" content="Biswadeep Chakraborty , CSE undergraduate at IISER Bhopal working on Human-Centred AI.">
+<meta name="description" content="Biswadeep Chakraborty — CSE undergraduate at IISER Bhopal working on optimal transport, model fusion and human-centred AI.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
+  /* page surfaces (light) */
+  --paper: #f3f2f5;
+  --paper-deep: #eae9ee;
+  --card: #fbfbfd;
+  --paper-edge: #d8d6df;
+
   --ink: #100f14;
-  --ink-2: #17161d;
-  --ink-soft: #35323d;
-  --paper: #f2f2f4;
-  --paper-deep: #e8e7ec;
-  --paper-edge: #d5d3dc;
+  --ink-soft: #3b3845;
+  --muted: #74717e;
+
   --accent: #6b4a7a;
   --accent-bright: #9a6fb4;
   --accent-light: #c9b2d6;
-  --muted: #7a7783;
-  --muted-light: #a9a6b3;
-  --line-dark: #2b2833;
-  --serif: 'Fraunces', Georgia, serif;
-  --sans: 'Instrument Sans', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', monospace;
+
+  /* surfaces that stay dark in both themes */
+  --night: #100f14;
+  --night-2: #1a1821;
+  --night-fg: #f2f2f4;
+  --night-line: #2b2833;
+  --night-muted: #7a7783;
+
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --maxw: 1180px;
+  --pad: 2.5rem;
+  --gap: 1.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #131218;
+    --paper-deep: #191821;
+    --card: #1c1b24;
+    --paper-edge: #2e2b38;
+    --ink: #f0eef4;
+    --ink-soft: #c2becd;
+    --muted: #8f8b9b;
+    --accent: #b48fd0;
+    --accent-bright: #c8a6e2;
+    --accent-light: #ddc9ec;
+    --night: #0b0a0e;
+    --night-2: #141219;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #131218;
+  --paper-deep: #191821;
+  --card: #1c1b24;
+  --paper-edge: #2e2b38;
+  --ink: #f0eef4;
+  --ink-soft: #c2becd;
+  --muted: #8f8b9b;
+  --accent: #b48fd0;
+  --accent-bright: #c8a6e2;
+  --accent-light: #ddc9ec;
+  --night: #0b0a0e;
+  --night-2: #141219;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 ::selection { background: var(--accent); color: #fff; }
-
 html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
@@ -42,19 +85,85 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.label {
-  font-family: var(--mono);
-  font-size: 0.64rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+body.locked { overflow: hidden; }
+
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 3px; }
+
+/* ================= OVERTURE (optimal-transport intro) ================= */
+.overture {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--night);
+  display: block;
 }
 
-/* ============ STAGE / NEURAL NAV ============ */
+.overture.done { opacity: 0; pointer-events: none; transition: opacity 0.85s ease; }
+.overture.gone { display: none; }
+
+#ot { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.ot-read {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 12%;
+  display: flex;
+  gap: 2.25rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  color: #6a6478;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  white-space: nowrap;
+}
+
+.ot-read.on { opacity: 1; }
+.ot-read b { font-weight: 400; color: var(--accent-light); }
+
+.ot-sub {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, 0);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.3em;
+  color: #8e87a0;
+  opacity: 0;
+  transition: opacity 1s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ot-sub.on { opacity: 1; }
+
+.ot-skip {
+  position: absolute;
+  right: 2rem;
+  bottom: 1.75rem;
+  background: none;
+  border: 0;
+  color: #6a6478;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s;
+}
+
+.ot-skip:hover { color: var(--accent-light); }
+
+/* ================= STAGE ================= */
 .stage {
   position: relative;
   min-height: 100vh;
-  background: var(--ink);
-  color: var(--paper);
+  min-height: 100svh;
+  background: var(--night);
+  color: var(--night-fg);
   overflow: hidden;
   isolation: isolate;
 }
@@ -63,23 +172,19 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(120% 90% at 50% 45%, transparent 35%, rgba(9,8,12,0.75) 100%);
+  background: radial-gradient(120% 90% at 50% 45%, transparent 35%, rgba(6,5,9,0.72) 100%);
   pointer-events: none;
   z-index: 2;
 }
 
-#net {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
+#net { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 
 .stage-head {
   position: relative;
   z-index: 4;
-  padding: 2rem 3rem 0;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2.25rem var(--pad) 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -89,48 +194,40 @@ body {
 
 .stage-name {
   font-family: var(--serif);
-  font-weight: 400;
-  font-size: 1.25rem;
+  font-weight: 500;
+  font-size: 1.3rem;
   letter-spacing: -0.02em;
 }
 
 .stage-role {
   font-family: var(--mono);
   font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  letter-spacing: 0.14em;
   color: var(--accent-light);
-  margin-top: 0.4rem;
+  margin-top: 0.35rem;
 }
 
 .stage-meta {
   font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--night-muted);
   text-align: right;
   line-height: 1.9;
 }
 
-/* node label buttons overlaid on the canvas */
-.node-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
+.node-layer { position: absolute; inset: 0; z-index: 3; }
 
 .node-btn {
   position: absolute;
   background: none;
   border: 0;
-  padding: 0.35rem 0.5rem;
+  padding: 0.3rem 0.45rem;
   cursor: pointer;
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted-light);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: #a9a6b3;
   transition: color 0.3s, opacity 0.6s;
   white-space: nowrap;
   opacity: 0;
@@ -140,11 +237,8 @@ body {
 }
 
 .node-btn.on { opacity: 1; }
-.node-btn:hover, .node-btn:focus-visible { color: #fff; outline: none; }
-.node-btn:focus-visible { text-decoration: underline; text-underline-offset: 5px; }
-.node-btn .idx { font-size: 0.58rem; color: var(--accent-bright); }
-
-.node-btn.left { transform: translate(-100%, -50%); flex-direction: row-reverse; }
+.node-btn:hover { color: #fff; }
+.node-btn .idx { font-size: 0.56rem; color: var(--accent-bright); }
 .node-btn.right { transform: translate(0, -50%); }
 .node-btn.below { transform: translate(-50%, 0); }
 
@@ -153,11 +247,10 @@ body {
   transform: translate(-50%, 0);
   font-family: var(--mono);
   font-size: 0.55rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #5b5666;
+  letter-spacing: 0.2em;
+  color: #57525f;
   opacity: 0;
-  transition: opacity 1.2s ease 0.6s;
+  transition: opacity 1.2s ease 0.4s;
   pointer-events: none;
   white-space: nowrap;
 }
@@ -166,10 +259,11 @@ body {
 
 .stage-foot {
   position: absolute;
-  left: 3rem;
-  right: 3rem;
-  bottom: 2rem;
+  left: 0; right: 0; bottom: 2rem;
   z-index: 4;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -180,7 +274,7 @@ body {
 .stage-tag {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
   line-height: 1.35;
   letter-spacing: -0.02em;
   max-width: 30ch;
@@ -192,9 +286,8 @@ body {
 .hint {
   font-family: var(--mono);
   font-size: 0.6rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
+  letter-spacing: 0.16em;
+  color: var(--night-muted);
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -203,9 +296,8 @@ body {
 
 .hint::after {
   content: '';
-  width: 26px;
-  height: 1px;
-  background: var(--muted);
+  width: 26px; height: 1px;
+  background: var(--night-muted);
   animation: slide 2.6s ease-in-out infinite;
 }
 
@@ -214,16 +306,13 @@ body {
   50% { transform: scaleX(1); opacity: 1; transform-origin: left; }
 }
 
-/* ============ FLOATING NAV ============ */
+/* ================= TOP NAV ================= */
 .topnav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 0.9rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(242, 242, 244, 0.88);
+  background: var(--paper);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--paper-edge);
   transform: translateY(-105%);
@@ -232,128 +321,150 @@ body {
 
 .topnav.show { transform: translateY(0); }
 
+.topnav-in {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0.85rem var(--pad);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .topnav a {
   font-family: var(--mono);
   font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
   color: var(--muted);
   text-decoration: none;
   transition: color 0.25s;
 }
 
 .topnav a:hover { color: var(--accent); }
-.topnav .brand { color: var(--ink); letter-spacing: 0.1em; }
-.topnav ul { display: flex; gap: 1.6rem; list-style: none; }
+.topnav .brand { color: var(--ink); }
+.topnav ul { display: flex; gap: 1.4rem; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
 
-/* ============ SECTION SCAFFOLD ============ */
-.sec { padding: 8rem 3rem; position: relative; }
+/* ================= SECTION SCAFFOLD ================= */
+.sec { padding: 6rem var(--pad); position: relative; }
 
-.grid12 {
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: 2rem;
+  column-gap: var(--gap);
 }
 
 .sec-head {
   grid-column: 1 / -1;
-  margin-bottom: 4.5rem;
+  margin-bottom: 3.5rem;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: 2rem;
-  align-items: end;
+  column-gap: var(--gap);
+  align-items: baseline;
 }
 
 .sec-mark {
   grid-column: 1 / 3;
   font-family: var(--mono);
   font-size: 0.62rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  letter-spacing: 0.14em;
   color: var(--accent);
-  padding-bottom: 0.6rem;
 }
 
 .sec-title {
-  grid-column: 3 / 11;
+  grid-column: 3 / 12;
   font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  font-weight: 500;
+  font-size: clamp(1.85rem, 3.6vw, 2.8rem);
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.08;
 }
 
 .sec-rule {
   grid-column: 1 / -1;
   height: 1px;
   background: var(--paper-edge);
-  margin-top: 1.75rem;
+  margin-top: 1.4rem;
 }
 
 .sec.bloom .sec-title { animation: bloomIn 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
 
 @keyframes bloomIn {
-  from { opacity: 0; transform: translateY(14px); letter-spacing: 0.02em; }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: none; }
 }
 
-/* ============ ABOUT ============ */
-.about-body { grid-column: 2 / 8; }
+/* ================= ABOUT ================= */
+.about-body { grid-column: 1 / 8; }
 
 .about-body p {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   color: var(--ink-soft);
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.15rem;
   line-height: 1.8;
+  max-width: 68ch;
 }
 
 .about-body p:first-child::first-letter {
   font-family: var(--serif);
-  font-weight: 500;
-  font-size: 3.6rem;
+  font-weight: 600;
+  font-size: 3.4rem;
   float: left;
-  line-height: 0.88;
-  margin-right: 0.6rem;
-  margin-top: 0.32rem;
+  line-height: 0.86;
+  margin: 0.3rem 0.55rem 0 0;
   color: var(--accent);
 }
 
-.about-side {
-  grid-column: 9 / 13;
-  margin-top: 7rem;
-  border-top: 2px solid var(--accent);
-  padding-top: 1.5rem;
+.about-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-light);
+  padding-bottom: 0.2rem;
 }
 
-.side-block { margin-bottom: 2.25rem; }
+.about-link:hover { color: var(--ink); border-color: var(--accent); }
+
+.about-side {
+  grid-column: 9 / 13;
+  align-self: start;
+  border-top: 2px solid var(--accent);
+  padding-top: 1.35rem;
+}
+
+.side-block { margin-bottom: 2rem; }
 .side-block:last-child { margin-bottom: 0; }
 
 .side-title {
   font-family: var(--mono);
   font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   color: var(--muted);
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.8rem;
 }
 
 .tag-list { list-style: none; }
 
 .tag-list li {
-  font-size: 0.9rem;
-  padding: 0.28rem 0;
-  display: flex;
-  align-items: baseline;
-  gap: 0.65rem;
+  font-size: 0.89rem;
+  line-height: 1.5;
+  padding: 0.26rem 0 0.26rem 0.95rem;
+  position: relative;
   color: var(--ink);
 }
 
 .tag-list li::before {
   content: '';
+  position: absolute;
+  left: 0;
+  top: 0.78em;
   width: 5px; height: 5px;
   background: var(--accent);
-  flex-shrink: 0;
-  transform: translateY(-2px);
 }
 
 .tag-list.secondary li { color: var(--muted); }
@@ -362,50 +473,45 @@ body {
 .lang-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.42rem 0;
+  gap: 1rem;
+  padding: 0.4rem 0;
   border-bottom: 1px solid var(--paper-edge);
-  font-size: 0.85rem;
+  font-size: 0.86rem;
 }
 
 .lang-item span:last-child { color: var(--muted); font-size: 0.78rem; }
 
-
-.medium-link { grid-column: 2 / 8; margin-top: -0.3rem; margin-bottom: 2rem; }
-.medium-link a { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-light); padding-bottom: 0.25rem; }
-.medium-link a:hover { color: var(--ink); border-color: var(--accent); }
-/* ============ EXPERIENCE ============ */
+/* ================= EXPERIENCE ================= */
 .experience { background: var(--paper-deep); }
-.experience .sec-rule { background: var(--paper-edge); }
 
 .exp-item {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: 2rem;
-  padding: 3rem 0;
+  column-gap: var(--gap);
+  padding: 2.5rem 0;
   border-top: 1px solid var(--paper-edge);
 }
 
 .exp-item:last-child { border-bottom: 1px solid var(--paper-edge); }
 
 .exp-meta { grid-column: 1 / 4; }
-.exp-body { grid-column: 4 / 12; }
+.exp-body { grid-column: 4 / 13; }
 
 .exp-where {
   font-family: var(--mono);
-  font-size: 0.63rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
   color: var(--accent);
   line-height: 1.7;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .exp-date {
   font-family: var(--mono);
   font-size: 0.63rem;
   color: var(--muted);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   line-height: 1.7;
 }
 
@@ -413,196 +519,227 @@ body {
   display: inline-block;
   margin-top: 0.8rem;
   font-family: var(--mono);
-  font-size: 0.55rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
   background: var(--accent);
   color: #fff;
-  padding: 0.22rem 0.5rem;
+  padding: 0.2rem 0.5rem;
 }
 
 .exp-role {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  font-size: clamp(1.25rem, 2vw, 1.55rem);
   line-height: 1.22;
   letter-spacing: -0.02em;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .exp-desc {
   font-size: 0.93rem;
   color: var(--ink-soft);
-  line-height: 1.8;
-  max-width: 62ch;
+  line-height: 1.78;
+  max-width: 72ch;
 }
 
-.exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
+.exp-desc + .exp-desc { margin-top: 0.75rem; }
+
+.exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.1rem; }
 
 .exp-tag {
   font-family: var(--mono);
   font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0.3rem 0.65rem;
-  background: var(--paper);
+  letter-spacing: 0.08em;
+  padding: 0.28rem 0.6rem;
+  background: var(--card);
   border: 1px solid var(--paper-edge);
   color: var(--muted);
 }
 
-/* ============ WORK ============ */
-.work-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; }
-
-.wk {
-  border-top: 2px solid var(--ink);
-  padding-top: 1.5rem;
-  display: flex;
-  flex-direction: column;
+/* ================= CARD GRIDS (equal boxes) ================= */
+.cards {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+  grid-auto-rows: 1fr;
 }
 
-.wk.feature { grid-column: 1 / 8; }
-.wk.side { grid-column: 9 / 13; }
-.wk.third { grid-column: span 4; border-top-color: var(--paper-edge); }
-.wk.wide { grid-column: 1 / 7; border-top-color: var(--paper-edge); }
-.wk.wide-2 { grid-column: 7 / 13; border-top-color: var(--paper-edge); }
+.cards.duo { grid-template-columns: repeat(3, 1fr); }
+
+.wk {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--paper-edge);
+  border-top: 2px solid var(--paper-edge);
+  padding: 1.5rem 1.4rem 1.35rem;
+  min-height: 100%;
+}
+
+.wk.is-live { border-top-color: var(--accent); }
 
 .wk-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
   color: var(--muted);
-  margin-bottom: 1.1rem;
+  margin-bottom: 1rem;
+  min-height: 1.2rem;
 }
 
-.wk-live { background: var(--accent); color: #fff; padding: 0.22rem 0.5rem; font-size: 0.55rem; }
+.wk-live { background: var(--accent); color: #fff; padding: 0.2rem 0.45rem; font-size: 0.55rem; }
 
 .wk h3 {
   font-family: var(--serif);
   font-weight: 500;
+  font-size: 1.18rem;
   letter-spacing: -0.02em;
-  line-height: 1.22;
-  margin-bottom: 0.85rem;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
 }
 
-.wk.feature h3 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
-.wk.side h3, .wk.third h3, .wk.wide h3, .wk.wide-2 h3 { font-size: 1.2rem; }
-
-.wk p { font-size: 0.9rem; color: var(--muted); line-height: 1.78; margin-bottom: 1.3rem; }
-.wk.feature p { font-size: 1rem; color: var(--ink-soft); max-width: 56ch; }
+.wk p {
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  line-height: 1.75;
+  margin-bottom: 1.25rem;
+}
 
 .wk-meta {
   font-family: var(--mono);
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
   color: var(--accent);
   margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--paper-edge);
 }
 
-/* ============ BEYOND RESEARCH ============ */
-.extracurricular { background: var(--paper); }
-.extracurricular .wk.feature { border-top-color: var(--accent); }
-.extracurricular .wk.side { border-top-color: var(--accent); }
-.extracurricular .wk h3 { margin-bottom: 0.85rem; }
+.wk.ghost {
+  background: transparent;
+  border: 1px dashed var(--paper-edge);
+  border-top: 1px dashed var(--paper-edge);
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  transition: border-color 0.3s, color 0.3s;
+}
 
-/* ============ TOOLKIT ============ */
-.toolkit { background: var(--ink); color: var(--paper); }
+.wk.ghost h3 { margin-bottom: 0.4rem; }
+.wk.ghost p { margin-bottom: 0; color: var(--muted); }
+.wk.ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ================= TOOLKIT ================= */
+.toolkit { background: var(--night); color: var(--night-fg); }
 .toolkit .sec-mark { color: var(--accent-light); }
-.toolkit .sec-rule { background: var(--line-dark); }
+.toolkit .sec-title { color: var(--night-fg); }
+.toolkit .sec-rule { background: var(--night-line); }
 
-.tk-grid { grid-column: 2 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 2.5rem 3rem; }
+.tk-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem var(--gap);
+}
 
 .tk-title {
   font-family: var(--mono);
   font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   color: var(--accent-light);
-  padding-bottom: 0.7rem;
-  margin-bottom: 0.85rem;
-  border-bottom: 1px solid var(--line-dark);
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--night-line);
 }
 
 .tk-list { list-style: none; }
-.tk-list li { font-size: 0.88rem; padding: 0.28rem 0; }
-.tk-list li::before { content: '/'; color: var(--accent-bright); margin-right: 0.55rem; font-family: var(--mono); font-size: 0.78rem; }
 
-/* ============ RECORD ============ */
-.rec-left { grid-column: 1 / 6; }
-.rec-right { grid-column: 7 / 13; margin-top: 5rem; }
+.tk-list li {
+  font-size: 0.88rem;
+  padding: 0.26rem 0 0.26rem 1.1rem;
+  position: relative;
+  color: #ded9e6;
+}
+
+.tk-list li::before {
+  content: '/';
+  position: absolute;
+  left: 0;
+  top: 0.26rem;
+  color: var(--accent-bright);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+/* ================= RECORD ================= */
+.rec-col { grid-column: 1 / 7; }
+.rec-col + .rec-col { grid-column: 7 / 13; }
 
 .rec-sub {
   font-family: var(--mono);
   font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   color: var(--accent);
-  padding-bottom: 0.7rem;
+  padding-bottom: 0.65rem;
   border-bottom: 2px solid var(--ink);
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.4rem;
 }
 
-.honor { padding: 1.35rem 0; border-bottom: 1px solid var(--paper-edge); }
+.rec-row { padding: 1.15rem 0; border-bottom: 1px solid var(--paper-edge); }
 
-.honor-year {
+.rec-year {
   font-family: var(--mono);
   font-size: 0.6rem;
   color: var(--accent);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   display: block;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.4rem;
 }
 
-.honor h4 { font-family: var(--sans); font-weight: 600; font-size: 0.94rem; margin-bottom: 0.3rem; }
-.honor p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+.rec-row h4 { font-family: var(--sans); font-weight: 600; font-size: 0.94rem; margin-bottom: 0.25rem; }
+.rec-row p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+.rec-school { font-family: var(--serif); font-weight: 500; font-size: 1.12rem; letter-spacing: -0.015em; margin-bottom: 0.15rem; }
+.rec-detail { font-size: 0.84rem; color: var(--muted); }
 
-.edu { padding: 1.35rem 0; border-bottom: 1px solid var(--paper-edge); }
-.edu-year { font-family: var(--mono); font-size: 0.6rem; color: var(--accent); letter-spacing: 0.14em; display: block; margin-bottom: 0.45rem; }
-.edu-school { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; letter-spacing: -0.015em; margin-bottom: 0.2rem; }
-.edu-detail { font-size: 0.84rem; color: var(--muted); }
-
-/* ============ CONTACT ============ */
-.contact { background: var(--ink); color: var(--paper); padding: 9rem 3rem 6rem; }
+/* ================= CONTACT ================= */
+.contact { background: var(--night); color: var(--night-fg); padding: 6.5rem var(--pad) 4.5rem; }
+.contact-in { max-width: var(--maxw); margin: 0 auto; }
 
 .contact-pre {
   font-family: var(--mono);
   font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   color: var(--accent-light);
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .contact h2 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(2.2rem, 6vw, 4.4rem);
+  font-size: clamp(2rem, 5vw, 3.6rem);
   letter-spacing: -0.035em;
-  line-height: 1.02;
-  margin-bottom: 2.5rem;
-  max-width: 16ch;
+  line-height: 1.05;
+  margin-bottom: 1.75rem;
+  max-width: 17ch;
 }
 
 .contact h2 em { font-style: italic; color: var(--accent-light); }
-
-.contact-note { color: var(--muted-light); max-width: 44ch; font-size: 0.95rem; line-height: 1.8; margin-bottom: 3rem; }
-
-.contact-links { display: flex; gap: 0; flex-wrap: wrap; border-top: 1px solid var(--line-dark); }
+.contact-note { color: #b4b0bf; max-width: 46ch; font-size: 0.95rem; line-height: 1.8; margin-bottom: 2.75rem; }
+.contact-links { display: flex; flex-wrap: wrap; border-top: 1px solid var(--night-line); }
 
 .contact-link {
   font-family: var(--mono);
   font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--paper);
+  letter-spacing: 0.1em;
+  color: var(--night-fg);
   text-decoration: none;
-  padding: 1.4rem 2.5rem 1.4rem 0;
-  border-bottom: 1px solid var(--line-dark);
+  padding: 1.3rem 2.5rem 1.3rem 0;
+  border-bottom: 1px solid var(--night-line);
   margin-right: 2.5rem;
   transition: color 0.25s;
   position: relative;
@@ -620,25 +757,23 @@ body {
 .contact-link:hover { color: var(--accent-light); }
 .contact-link:hover::after { width: calc(100% - 2.5rem); }
 
-footer {
-  background: var(--ink);
-  padding: 2rem 3rem;
+footer { background: var(--night); border-top: 1px solid var(--night-line); }
+
+.footer-in {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.75rem var(--pad);
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  border-top: 1px solid var(--line-dark);
+  flex-wrap: wrap;
 }
 
-footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; }
+footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-muted); letter-spacing: 0.08em; }
 
-/* ============ REVEAL ============ */
-.rv { opacity: 0; transform: translateY(22px); transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+/* ================= REVEAL ================= */
+.rv { opacity: 0; transform: translateY(18px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
 .rv.vis { opacity: 1; transform: none; }
-.rv:nth-child(2) { transition-delay: 0.06s; }
-.rv:nth-child(3) { transition-delay: 0.12s; }
-.rv:nth-child(4) { transition-delay: 0.18s; }
-.rv:nth-child(5) { transition-delay: 0.22s; }
-.rv:nth-child(6) { transition-delay: 0.26s; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -647,39 +782,55 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
   .sec.bloom .sec-title { animation: none; }
 }
 
-/* ============ RESPONSIVE ============ */
-@media (max-width: 1000px) {
-  .sec { padding: 5.5rem 1.5rem; }
-  .stage-head { padding: 1.5rem 1.5rem 0; }
-  .stage-foot { left: 1.5rem; right: 1.5rem; bottom: 1.5rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
-  .topnav { padding: 0.8rem 1.5rem; }
-  .topnav ul { gap: 1rem; }
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1040px) {
+  .cards, .cards.duo, .tk-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-body { grid-column: 1 / 9; }
+  .about-side { grid-column: 9 / 13; }
+}
 
-  .about-body, .medium-link, .about-side, .exp-meta, .exp-body,
-  .tk-grid, .rec-left, .rec-right,
-  .wk.feature, .wk.side, .wk.third, .wk.wide, .wk.wide-2 { grid-column: 1 / -1; }
-
-  .sec-mark { grid-column: 1 / -1; padding-bottom: 0.9rem; }
+@media (max-width: 860px) {
+  :root { --pad: 1.4rem; --gap: 1.25rem; }
+  .sec { padding: 4.5rem var(--pad); }
+  .sec-head { margin-bottom: 2.5rem; }
+  .sec-mark { grid-column: 1 / -1; margin-bottom: 0.7rem; }
   .sec-title { grid-column: 1 / -1; }
-  .about-side { margin-top: 3rem; }
-  .rec-right { margin-top: 3rem; }
-  .exp-meta { margin-bottom: 1.25rem; }
-  .exp-item { padding: 2.25rem 0; }
-  .work-grid { gap: 2.5rem; }
-  .contact { padding: 5.5rem 1.5rem 4rem; }
-  footer { padding: 2rem 1.5rem; flex-direction: column; }
+  .about-body, .about-side, .exp-meta, .exp-body,
+  .rec-col, .rec-col + .rec-col { grid-column: 1 / -1; }
+  .about-side { margin-top: 2.75rem; }
+  .rec-col + .rec-col { margin-top: 2.5rem; }
+  .exp-meta { margin-bottom: 1.1rem; }
+  .exp-item { padding: 2rem 0; }
+  .cards, .cards.duo, .tk-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .stage-foot { flex-direction: column; align-items: flex-start; gap: 1rem; bottom: 1.5rem; }
+  .contact { padding: 4.5rem var(--pad) 3.5rem; }
+  .topnav ul { display: none; }
 }
 
 @media (max-width: 560px) {
   .stage-meta { display: none; }
-  .node-btn { font-size: 0.62rem; letter-spacing: 0.1em; }
-  .contact-link { padding-right: 1.5rem; margin-right: 1.5rem; }
+  .node-btn { font-size: 0.62rem; }
+  .contact-link { padding-right: 1.4rem; margin-right: 1.4rem; }
+  .ot-read { gap: 1.1rem; font-size: 0.54rem; }
+  .ot-sub { font-size: 0.56rem; letter-spacing: 0.2em; }
 }
 </style>
 </head>
-<body>
+<body class="locked">
 
-<!-- ================= NEURAL STAGE ================= -->
+<!-- ================= OVERTURE ================= -->
+<div class="overture" id="overture" aria-hidden="true">
+  <canvas id="ot"></canvas>
+  <div class="ot-sub" id="otSub">Human-Centred AI · Representation Learning</div>
+  <div class="ot-read" id="otRead">
+    <span>t <b id="rdT">0.00</b></span>
+    <span>W₂ <b id="rdW">—</b></span>
+    <span id="rdPhase">two parent models</span>
+  </div>
+  <button class="ot-skip" id="otSkip" type="button">skip</button>
+</div>
+
+<!-- ================= STAGE ================= -->
 <header class="stage" id="stage">
   <canvas id="net"></canvas>
 
@@ -688,352 +839,637 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       <div class="stage-name">Biswadeep Chakraborty</div>
       <div class="stage-role">Human-Centred AI · Representation Learning</div>
     </div>
-    <div class="stage-meta">
-      IISER Bhopal<br>
-      EECS 
-    </div>
+    <div class="stage-meta">IISER Bhopal<br>EECS</div>
   </div>
 
   <div class="node-layer" id="nodeLayer"></div>
 
   <div class="stage-foot">
-    <p class="stage-tag">I explore the space where <em>human needs</em> meet intelligent systems
+    <p class="stage-tag">I explore the space where <em>human needs</em> meet intelligent systems.</p>
     <div class="hint">Tap a node to open</div>
   </div>
 </header>
 
 <!-- ================= TOP NAV ================= -->
 <nav class="topnav" id="topnav">
-  <a href="#stage" class="brand">Biswadeep Chakraborty</a>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#work">Projects</a></li>
-    <li><a href="#toolkit">Toolkit</a></li>
-    <li><a href="#record">Record</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+  <div class="topnav-in">
+    <a href="#stage" class="brand">Biswadeep Chakraborty</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Research</a></li>
+      <li><a href="#work">Projects</a></li>
+      <li><a href="#toolkit">Toolkit</a></li>
+      <li><a href="#beyond">Beyond</a></li>
+      <li><a href="#record">Record</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
 </nav>
 
 <!-- ================= ABOUT ================= -->
-<section class="sec grid12" id="about">
-  <div class="sec-head">
-    <div class="sec-mark">01 / About</div>
-    <h2 class="sec-title">Where the work sits</h2>
-    <div class="sec-rule"></div>
-  </div>
-
-  <div class="about-body rv">
-    <p>Born and raised in Naharlagun, Arunachal Pradesh, the northeasternmost part of India, where the sun rises first, I didn't have extensive exposure to Computer Science or technology in general. No coding bootcamps, no high-school startup garages. What I did have was curiosity , curiosity about the mechanics of an equation, curiosity about the mechanics of a process, why people make the choices they do, and what happens when you mix the right spices in the wrong order.</p>
-    <p>Having learnt Python for the first time in high school, my prior interest in mathematics was accompanied by tinges of coding, which led to a little exploration, and thus I chose my major as CSE, as it appeared to me to be one of the most direct applications of mathematics.</p>
-    <p>Now, coming to my interests.</p>
-    <p>I like working around problems concerning humans and solving them using AI , what you would call AI for Humans or Humans for AI? Both ways, actually. So, I am interested in Human-Centred Intelligent Systems. However, my project that aligns with it is focused on documenting and reviving the traditional handloom motifs of the tribes of Arunachal Pradesh. However, it has taken a lot of time since the dataset is still not extensive enough.</p>
-    <p>My areas of interest are in Representation Learning.</p>
-    <p>Of late, I have been working on applications of Optimal Transport theory, specifically in Transformer fusion of heterogeneous depths. The work is still in progress, since its onset at CCU, Taiwan, where I interned under the Taiwan Education Exchange Program (TEEP) in the summer of 2026, and I hope to publish it soon.</p>
-    <p>Apart from all this, I am a connoisseur of cuisines around the world and have loved cooking since I was eight years old. I also write blogs, which you can read on Medium :). Although I loved reading during my teenage years, that habit has transcended more into writing now. My writing involves mixing random thoughts with nostalgic fragments that occur to me at times.</p>
-  </div>
-
-  <div class="medium-link rv">
-    <a href="https://medium.com/@biswadeepch11/hiraeth-a-home-in-arunachal-1426e289ca23" target="_blank" rel="noopener">Read on Medium: Hiraeth, A Home in Arunachal ↗</a>
-  </div>
-
-  <aside class="about-side rv">
-    <div class="side-block">
-      <div class="side-title">Working on</div>
-      <ul class="tag-list">
-        <li>Optimal Transport &amp; Model Fusion</li>
-        <li>Human-Centred AI</li>
-        <li>Representation Learning</li>
-        <li>Deep Generative Models</li>
-        <li>Federated Learning</li>
-      </ul>
+<section class="sec" id="about">
+  <div class="inner">
+    <div class="sec-head">
+      <div class="sec-mark">01 / About</div>
+      <h2 class="sec-title">Where the work sits</h2>
+      <div class="sec-rule"></div>
     </div>
-    <div class="side-block">
-      <div class="side-title">Want to explore</div>
-      <ul class="tag-list secondary">
-        <li>Explainable AI</li>
-        <li>Sustainable AI</li>
-        <li>Reinforcement Learning</li>
-      </ul>
+
+    <div class="about-body rv">
+      <p>Born and raised in Naharlagun, Arunachal Pradesh — the northeasternmost part of India, where the sun rises first — I didn't have extensive exposure to computer science or technology in general. No coding bootcamps, no high-school startup garages. What I did have was curiosity: about the mechanics of an equation, about the mechanics of a process, about why people make the choices they do, and about what happens when you mix the right spices in the wrong order.</p>
+      <p>Having learnt Python for the first time in high school, my prior interest in mathematics was accompanied by tinges of coding, which led to a little exploration, and so I chose CSE as my major — it appeared to me to be one of the most direct applications of mathematics.</p>
+      <p>I like working around problems concerning humans and solving them using AI. AI for humans, or humans for AI? Both ways, actually. So I'm interested in human-centred intelligent systems, and the project that aligns most closely with that is focused on documenting and reviving the traditional handloom motifs of the tribes of Arunachal Pradesh. It has taken a lot of time, since the dataset is still not extensive enough.</p>
+      <p>My area of interest is representation learning. Of late I've been working on applications of optimal transport theory, specifically in transformer fusion across heterogeneous depths. The work is still in progress since its onset at CCU, Taiwan, where I interned under the Taiwan Education Exchange Program (TEEP) in the summer of 2026, and I hope to publish it soon.</p>
+      <p>Apart from all this, I'm a connoisseur of cuisines around the world and have loved cooking since I was eight. I also write, which you can read on Medium. Although I loved reading through my teenage years, that habit has transcended more into writing now — mostly random thoughts mixed with nostalgic fragments that occur to me at times.</p>
+      <a class="about-link" href="https://medium.com/@biswadeepch11/hiraeth-a-home-in-arunachal-1426e289ca23" target="_blank" rel="noopener">Read on Medium: Hiraeth, A Home in Arunachal ↗</a>
     </div>
-    <div class="side-block">
-      <div class="side-title">Languages</div>
-      <div class="lang-item"><span>Bengali</span><span>Native</span></div>
-      <div class="lang-item"><span>Hindi</span><span>Native</span></div>
-      <div class="lang-item"><span>English</span><span>Professional</span></div>
-      <div class="lang-item"><span>Assamese</span><span>Rudimentary</span></div>
-    </div>
-  </aside>
+
+    <aside class="about-side rv">
+      <div class="side-block">
+        <div class="side-title">Working on</div>
+        <ul class="tag-list">
+          <li>Optimal transport &amp; model fusion</li>
+          <li>Human-centred AI</li>
+          <li>Representation learning</li>
+          <li>Deep generative models</li>
+          <li>Federated learning</li>
+        </ul>
+      </div>
+      <div class="side-block">
+        <div class="side-title">Want to explore</div>
+        <ul class="tag-list secondary">
+          <li>Explainable AI</li>
+          <li>Sustainable AI</li>
+          <li>Reinforcement learning</li>
+        </ul>
+      </div>
+      <div class="side-block">
+        <div class="side-title">Languages</div>
+        <div class="lang-item"><span>Bengali</span><span>Native</span></div>
+        <div class="lang-item"><span>Hindi</span><span>Native</span></div>
+        <div class="lang-item"><span>English</span><span>Professional</span></div>
+        <div class="lang-item"><span>Assamese</span><span>Rudimentary</span></div>
+      </div>
+    </aside>
+  </div>
 </section>
 
 <!-- ================= EXPERIENCE ================= -->
-<section class="sec grid12 experience" id="experience">
-  <div class="sec-head">
-    <div class="sec-mark">02 / Experience</div>
-    <h2 class="sec-title">Research Experience</h2>
-    <div class="sec-rule"></div>
-  </div>
-
-  <article class="exp-item rv">
-    <div class="exp-meta">
-      <div class="exp-where">National Chung Cheng University<br>Taiwan · Research Intern</div>
-      <div class="exp-date">Jun 2026 – Aug 2026<br>TEEP · Chiayi, Taiwan</div>
-      <span class="exp-live">Most recent</span>
+<section class="sec experience" id="experience">
+  <div class="inner">
+    <div class="sec-head">
+      <div class="sec-mark">02 / Research</div>
+      <h2 class="sec-title">Research experience</h2>
+      <div class="sec-rule"></div>
     </div>
-    <div class="exp-body">
-      <h3 class="exp-role">Heterogeneous Transformer Fusion Along Statistical Manifolds : A Bures-Wasserstein Approach</h3>
-      <p class="exp-desc">Dept. of Computer Science and Information Engineering.The work develops a multi-scale fusion pipeline and, more importantly, examines which component actually drives its performance. Through an analytical study of Wasserstein barycentric interpolation under the Bures metric, I show that the fused weights depend on distributional statistics that are invariant to row permutations, meaning that permutation alignment is not the mechanism responsible for the observed gains. Experiments across multiple alignment settings support this finding: hard permutation alignment is statistically indistinguishable from no alignment, while replacing Bures interpolation with Euclidean interpolation substantially degrades zero-shot fusion performance. The results suggest that, in this setting, the benefit of Optimal Transport based fusion comes from distributional matching of weight statistics rather than resolving permutation symmetry.</p>
-      <div class="exp-tags">
-        <span class="exp-tag">Optimal Transport</span>
-        <span class="exp-tag">Fused Gromov–Wasserstein</span>
-        <span class="exp-tag">Sinkhorn</span>
-        <span class="exp-tag">Vision Transformers</span>
+
+    <article class="exp-item rv">
+      <div class="exp-meta">
+        <div class="exp-where">National Chung Cheng University<br>Taiwan · Research Intern</div>
+        <div class="exp-date">Jun 2026 – Aug 2026<br>TEEP · Chiayi, Taiwan</div>
+        <span class="exp-live">Most recent</span>
       </div>
-    </div>
-  </article>
-
-  <article class="exp-item rv">
-    <div class="exp-meta">
-      <div class="exp-where">IIT Mandi<br>Summer Research Intern</div>
-      <div class="exp-date">Jun 2025 – Jul 2025<br>Mandi, HP</div>
-    </div>
-    <div class="exp-body">
-      <h3 class="exp-role">Drone Surveillance &amp; Trajectory Prediction</h3>
-      <p class="exp-desc">Under Dr Dinesh Singh, I worked on two problems at the intersection of optimisation and machine learning. First: scheduling drone patrols to minimise flight time under patrol-interval constraints , ILP, Greedy, Simulated Annealing, and a novel Multi-Stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal) for high coverage at reduced runtime. Second: the Trajectron model for multi-agent trajectory prediction using CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY with competitive ADE/FDE/NLL and outperforming baselines such as SGAN.</p>
-      <div class="exp-tags">
-        <span class="exp-tag">PyTorch</span>
-        <span class="exp-tag">ILP</span>
-        <span class="exp-tag">CVAEs</span>
-        <span class="exp-tag">Simulated Annealing</span>
-        <span class="exp-tag">Spatiotemporal Graphs</span>
+      <div class="exp-body">
+        <h3 class="exp-role">Heterogeneous transformer fusion along statistical manifolds: a Bures–Wasserstein approach</h3>
+        <p class="exp-desc">Dept. of Computer Science and Information Engineering. The work develops a multi-scale fusion pipeline and, more importantly, examines which component actually drives its performance. Through an analytical study of Wasserstein barycentric interpolation under the Bures metric, I show that the fused weights depend on distributional statistics that are invariant to row permutations, meaning permutation alignment is not the mechanism responsible for the observed gains.</p>
+        <p class="exp-desc">Experiments across multiple alignment settings support this: hard permutation alignment is statistically indistinguishable from no alignment, while replacing Bures interpolation with Euclidean interpolation substantially degrades zero-shot fusion performance. The benefit of optimal-transport-based fusion, in this setting, comes from distributional matching of weight statistics rather than resolving permutation symmetry.</p>
+        <div class="exp-tags">
+          <span class="exp-tag">Optimal Transport</span>
+          <span class="exp-tag">Fused Gromov–Wasserstein</span>
+          <span class="exp-tag">Sinkhorn</span>
+          <span class="exp-tag">Vision Transformers</span>
+        </div>
       </div>
-    </div>
-  </article>
+    </article>
 
-  <article class="exp-item rv">
-    <div class="exp-meta">
-      <div class="exp-where">IIT Bhubaneswar<br>Winter Research Intern</div>
-      <div class="exp-date">Dec 2024 – Jan 2025<br>Bhubaneswar, Odisha</div>
-    </div>
-    <div class="exp-body">
-      <h3 class="exp-role">Geospatial Knowledge Inference with LLMs</h3>
-      <p class="exp-desc">School of Electrical and Computer Sciences, with Dr. Shreya Ghosh and Dr. Abhik Jana, on the Microsoft Academic Partnership Grant 2024 project "Geospatial Knowledge Inference Using LLMs for Enhanced Travel Decision-Making." I built personalised travel-planning workflows on top of LLMs and the data engineering underneath them: web scraping with Playwright, API integration, geospatial dataset curation with Geopy, and automated processing to support scalable real-world analysis.</p>
-      <div class="exp-tags">
-        <span class="exp-tag">LLMs</span>
-        <span class="exp-tag">Playwright</span>
-        <span class="exp-tag">Geopy</span>
-        <span class="exp-tag">Data Engineering</span>
+    <article class="exp-item rv">
+      <div class="exp-meta">
+        <div class="exp-where">IIT Mandi<br>Summer Research Intern</div>
+        <div class="exp-date">Jun 2025 – Jul 2025<br>Mandi, HP</div>
       </div>
-    </div>
-  </article>
-</section>
-
-<!-- ================= WORK ================= -->
-<section class="sec grid12" id="work">
-  <div class="sec-head">
-    <div class="sec-mark">03 / Research &amp; Projects</div>
-    <h2 class="sec-title">What I've been building</h2>
-    <div class="sec-rule"></div>
-  </div>
-
-  <div class="work-grid">
-    <article class="wk feature rv">
-      <div class="wk-top"><span>01 / Independent</span><span class="wk-live">Ongoing</span></div>
-      <h3>Deep Generative Systems for Indigenous Textile Archiving</h3>
-      <p>An independent project applying deep learning to digitise, classify and re-envision the indigenous handloom motifs of Arunachal Pradesh. CNN/GAN pipelines for regional motif classification and generative synthesis, a searchable dataset integrating visual data, metadata and cultural narratives, and a prototype AI-assisted pattern-design toolkit , with neural style transfer fusing traditional motifs into contemporary aesthetics.</p>
-      <div class="wk-meta">CNN · GAN · Style Transfer · Jan 2026 –</div>
-    </article>
-<article class="wk wide rv">
-      <div class="wk-top"><span>03 / NCCU Taiwan</span></div>
-      <h3>Multi-Scale Optimal Transport Transformer Fusion</h3>
-      <p>Investigating why Optimal Transport based fusion works when combining heterogeneous Vision Transformers with different depths. The work analyses Wasserstein barycentric interpolation under the Bures metric and shows that, in this setting, the fused weights depend on distributional statistics that are invariant to row permutations. Experiments indicate that the benefit comes from distributional matching of weight statistics rather than resolving permutation symmetry.</p>
-      <div class="wk-meta">Optimal Transport · FGW · Sinkhorn</div>
+      <div class="exp-body">
+        <h3 class="exp-role">Drone surveillance &amp; trajectory prediction</h3>
+        <p class="exp-desc">Under Dr Dinesh Singh, I worked on two problems at the intersection of optimisation and machine learning. First: scheduling drone patrols to minimise flight time under patrol-interval constraints — ILP, Greedy, Simulated Annealing and a novel multi-stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal) for high coverage at reduced runtime. Second: the Trajectron model for multi-agent trajectory prediction using CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY with competitive ADE/FDE/NLL and outperforming baselines such as SGAN.</p>
+        <div class="exp-tags">
+          <span class="exp-tag">PyTorch</span>
+          <span class="exp-tag">ILP</span>
+          <span class="exp-tag">CVAEs</span>
+          <span class="exp-tag">Simulated Annealing</span>
+          <span class="exp-tag">Spatiotemporal Graphs</span>
+        </div>
+      </div>
     </article>
 
-    <article class="wk wide-2 rv">
-      <div class="wk-top"><span>04 / IIT Mandi</span></div>
-      <h3>Multi-Stage Drone Surveillance Scheduling</h3>
-      <p>A novel Multi-Stage algorithmic framework for minimising drone flight time under patrol-interval constraints, benchmarked against ILP, Greedy and Simulated Annealing. Tested on real university campus maps, achieving high area coverage with significantly lower runtime than traditional approaches.</p>
-      <div class="wk-meta">Optimization · ILP · Simulated Annealing</div>
-    </article>
-
-    <article class="wk third rv">
-      <div class="wk-top"><span>05 / IIT Mandi</span></div>
-      <h3>Trajectron: Multi-Agent Trajectory Prediction</h3>
-      <p>A graph-based deep generative model using Conditional VAEs and dynamic spatiotemporal graphs for pedestrian trajectories. Evaluated on ETH/UCY , competitive ADE, FDE and NLL, outperforming baselines such as Social GAN.</p>
-      <div class="wk-meta">CVAEs · Graphs · PyTorch</div>
-    </article>
-
-    <article class="wk third rv">
-      <div class="wk-top"><span>06 / IIT Bhubaneswar</span></div>
-      <h3>Geospatial LLM Inference for Travel</h3>
-      <p>The data backbone for an LLM-powered travel decision system , scraping flight data, curating geospatial datasets for Indian destinations, integrating APIs. The kind of infrastructure work that makes "AI-powered" tools actually function.</p>
-      <div class="wk-meta">LLMs · Data Engineering · Geospatial</div>
-    </article>
-
-    <article class="wk third rv">
-      <div class="wk-top"><span>07 / Community</span></div>
-      <h3>Be the Voice</h3>
-      <p>An NGO co-founded in school for stray animal feeding, medical treatment, adoption and abuse reporting across the Itanagar capital region. Not a tech project , a people project, and the hardest problems in it weren't computational.</p>
-      <div class="wk-meta">Community · Leadership</div>
+    <article class="exp-item rv">
+      <div class="exp-meta">
+        <div class="exp-where">IIT Bhubaneswar<br>Winter Research Intern</div>
+        <div class="exp-date">Dec 2024 – Jan 2025<br>Bhubaneswar, Odisha</div>
+      </div>
+      <div class="exp-body">
+        <h3 class="exp-role">Geospatial knowledge inference with LLMs</h3>
+        <p class="exp-desc">School of Electrical and Computer Sciences, with Dr Shreya Ghosh and Dr Abhik Jana, on the Microsoft Academic Partnership Grant 2024 project “Geospatial Knowledge Inference Using LLMs for Enhanced Travel Decision-Making.” I built personalised travel-planning workflows on top of LLMs and the data engineering underneath them: web scraping with Playwright, API integration, geospatial dataset curation with Geopy, and automated processing to support scalable real-world analysis.</p>
+        <div class="exp-tags">
+          <span class="exp-tag">LLMs</span>
+          <span class="exp-tag">Playwright</span>
+          <span class="exp-tag">Geopy</span>
+          <span class="exp-tag">Data Engineering</span>
+        </div>
+      </div>
     </article>
   </div>
 </section>
 
+<!-- ================= PROJECTS ================= -->
+<section class="sec" id="work">
+  <div class="inner">
+    <div class="sec-head">
+      <div class="sec-mark">03 / Projects</div>
+      <h2 class="sec-title">What I've been building</h2>
+      <div class="sec-rule"></div>
+    </div>
 
-<!-- ================= BEYOND RESEARCH ================= -->
-<section class="sec grid12 extracurricular" id="extracurricular">
-  <div class="sec-head">
-    <div class="sec-mark">04 / Beyond Research</div>
-    <h2 class="sec-title">Outside the lab</h2>
-    <div class="sec-rule"></div>
-  </div>
+    <div class="cards">
+      <article class="wk is-live rv">
+        <div class="wk-top"><span>Independent</span><span class="wk-live">Ongoing</span></div>
+        <h3>Deep generative systems for indigenous textile archiving</h3>
+        <p>Applying deep learning to digitise, classify and re-envision the indigenous handloom motifs of Arunachal Pradesh. CNN/GAN pipelines for regional motif classification and generative synthesis, a searchable dataset integrating visual data, metadata and cultural narratives, and a prototype AI-assisted pattern-design toolkit using neural style transfer.</p>
+        <div class="wk-meta">CNN · GAN · Style Transfer · Jan 2026 –</div>
+      </article>
 
-  <div class="work-grid">
-    <article class="wk feature rv">
-      <div class="wk-top"><span>01 / NGO</span></div>
-      <h3>Be the Voice</h3>
-      <p>Co-founded during school to support stray animals across the Itanagar capital region through feeding, medical treatment, adoption and abuse reporting. The experience taught me that meaningful problem-solving is often about people, coordination and persistence rather than technology alone.</p>
-      <div class="wk-meta">Community · Leadership · Social Impact</div>
-    </article>
+      <article class="wk rv">
+        <div class="wk-top"><span>CCU Taiwan</span></div>
+        <h3>Multi-scale optimal transport transformer fusion</h3>
+        <p>Fusing heterogeneous vision transformers by formulating model fusion as computational graph alignment. Fused Gromov–Wasserstein transport handles the macro structure, Wasserstein barycentric synthesis resolves the 6-vs-12-layer depth mismatch without heuristic identity padding, and Sinkhorn alignment handles parameters. 49.74% on CIFAR-100 after 15 fine-tuning epochs, past both parent models.</p>
+        <div class="wk-meta">Optimal Transport · FGW · Sinkhorn</div>
+      </article>
 
-    <article class="wk side rv">
-      <div class="wk-top"><span>02 / Leadership</span></div>
-      <h3>NEVISTA</h3>
-      <p>Community and organisational work focused on contributing beyond academic and research settings, developing leadership, coordination and execution skills.</p>
-      <div class="wk-meta">Leadership · Community</div>
-    </article>
+      <article class="wk rv">
+        <div class="wk-top"><span>IIT Mandi</span></div>
+        <h3>Multi-stage drone surveillance scheduling</h3>
+        <p>A novel multi-stage algorithmic framework for minimising drone flight time under patrol-interval constraints, benchmarked against ILP, Greedy and Simulated Annealing. Tested on real university campus maps, achieving high area coverage with significantly lower runtime than traditional approaches.</p>
+        <div class="wk-meta">Optimisation · ILP · Simulated Annealing</div>
+      </article>
 
-    <article class="wk wide rv">
-      <div class="wk-top"><span>03 / Convenor</span></div>
-      <h3>Student &amp; Community Initiatives</h3>
-      <p>Involved in organising and coordinating student initiatives, working across people and responsibilities to turn ideas into functioning activities.</p>
-      <div class="wk-meta">Organisation · Coordination</div>
-    </article>
+      <article class="wk rv">
+        <div class="wk-top"><span>IIT Mandi</span></div>
+        <h3>Trajectron: multi-agent trajectory prediction</h3>
+        <p>A graph-based deep generative model using conditional VAEs and dynamic spatiotemporal graphs for pedestrian trajectories. Evaluated on ETH/UCY with competitive ADE, FDE and NLL, outperforming baselines such as Social GAN.</p>
+        <div class="wk-meta">CVAEs · Graphs · PyTorch</div>
+      </article>
 
-    <article class="wk wide-2 rv">
-      <div class="wk-top"><span>04 / Writing</span></div>
-      <h3>Writing &amp; Personal Essays</h3>
-      <p>I write about places, memory, culture and the fragments of everyday life that stay with us. My Medium writing sits alongside my technical work as a more personal record of how I think.</p>
-      <div class="wk-meta">Writing · Culture · Reflection</div>
-    </article>
+      <article class="wk rv">
+        <div class="wk-top"><span>IIT Bhubaneswar</span></div>
+        <h3>Geospatial LLM inference for travel</h3>
+        <p>The data backbone for an LLM-powered travel decision system: scraping flight data, curating geospatial datasets for Indian destinations, integrating APIs. The kind of infrastructure work that makes “AI-powered” tools actually function.</p>
+        <div class="wk-meta">LLMs · Data Engineering · Geospatial</div>
+      </article>
+
+      <a class="wk ghost rv" href="https://github.com/biswakim" target="_blank" rel="noopener">
+        <div class="wk-top"><span>Repositories</span></div>
+        <h3>Code, notebooks and experiments</h3>
+        <p>Everything else lives on GitHub ↗</p>
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- ================= TOOLKIT ================= -->
-<section class="sec grid12 toolkit" id="toolkit">
-  <div class="sec-head">
-    <div class="sec-mark">05 / Toolkit</div>
-    <h2 class="sec-title" style="color: var(--paper)">What I work with</h2>
-    <div class="sec-rule"></div>
+<section class="sec toolkit" id="toolkit">
+  <div class="inner">
+    <div class="sec-head">
+      <div class="sec-mark">04 / Toolkit</div>
+      <h2 class="sec-title">What I work with</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="tk-grid">
+      <div class="rv">
+        <div class="tk-title">Programming</div>
+        <ul class="tk-list"><li>Python</li><li>C</li><li>SQL</li></ul>
+      </div>
+      <div class="rv">
+        <div class="tk-title">Machine learning</div>
+        <ul class="tk-list"><li>PyTorch</li><li>Scikit-learn</li><li>OpenCV</li></ul>
+      </div>
+      <div class="rv">
+        <div class="tk-title">Analysis &amp; visualisation</div>
+        <ul class="tk-list"><li>Pandas, NumPy</li><li>Matplotlib, Seaborn</li><li>NetworkX</li></ul>
+      </div>
+      <div class="rv">
+        <div class="tk-title">Mathematics</div>
+        <ul class="tk-list"><li>Linear algebra</li><li>Probability &amp; statistics</li><li>Optimisation, calculus</li></ul>
+      </div>
+      <div class="rv">
+        <div class="tk-title">Tools</div>
+        <ul class="tk-list"><li>Jupyter, Mathematica</li><li>AutoCAD</li><li>Microsoft Office</li></ul>
+      </div>
+      <div class="rv">
+        <div class="tk-title">Web &amp; automation</div>
+        <ul class="tk-list"><li>Playwright</li><li>Geopy</li><li>API integration</li></ul>
+      </div>
+    </div>
   </div>
-  <div class="tk-grid">
-    <div class="rv">
-      <div class="tk-title">Programming</div>
-      <ul class="tk-list"><li>Python</li><li>C</li><li>SQL</li></ul>
+</section>
+
+<!-- ================= BEYOND ================= -->
+<section class="sec" id="beyond">
+  <div class="inner">
+    <div class="sec-head">
+      <div class="sec-mark">05 / Beyond</div>
+      <h2 class="sec-title">Outside the lab</h2>
+      <div class="sec-rule"></div>
     </div>
-    <div class="rv">
-      <div class="tk-title">Machine Learning</div>
-      <ul class="tk-list"><li>PyTorch</li><li>Scikit-learn</li><li>OpenCV</li></ul>
-    </div>
-    <div class="rv">
-      <div class="tk-title">Analysis &amp; Visualization</div>
-      <ul class="tk-list"><li>Pandas, NumPy</li><li>Matplotlib, Seaborn</li><li>NetworkX</li></ul>
-    </div>
-    <div class="rv">
-      <div class="tk-title">Mathematics</div>
-      <ul class="tk-list"><li>Linear Algebra</li><li>Probability &amp; Statistics</li><li>Optimization, Calculus</li></ul>
-    </div>
-    <div class="rv">
-      <div class="tk-title">Tools</div>
-      <ul class="tk-list"><li>Jupyter, Mathematica</li><li>AutoCAD</li><li>Microsoft Office</li></ul>
-    </div>
-    <div class="rv">
-      <div class="tk-title">Web &amp; Automation</div>
-      <ul class="tk-list"><li>Playwright</li><li>Geopy</li><li>API Integration</li></ul>
+
+    <div class="cards duo">
+      <article class="wk rv">
+        <div class="wk-top"><span>Co-founder</span></div>
+        <h3>Be the Voice</h3>
+        <p>An NGO co-founded in school for stray animal feeding, medical treatment, adoption and abuse reporting across the Itanagar capital region. Not a tech project — a people project, and the hardest problems in it weren't computational.</p>
+        <div class="wk-meta">Community · Leadership</div>
+      </article>
+
+      <article class="wk rv">
+        <div class="wk-top"><span>Writing</span></div>
+        <h3>Essays on Medium</h3>
+        <p>Reading was the teenage habit; writing is what it became. Mostly random thoughts braided with nostalgic fragments — home, distance, and the northeast corner of India where the sun rises first.</p>
+        <div class="wk-meta">Medium · Personal essays</div>
+      </article>
+
+      <article class="wk rv">
+        <div class="wk-top"><span>Kitchen</span></div>
+        <h3>Cooking since eight</h3>
+        <p>A connoisseur of cuisines around the world, with a long-running interest in what happens when you mix the right spices in the wrong order. Some of the best debugging intuition I have came from here.</p>
+        <div class="wk-meta">Cuisines · Since 2011</div>
+      </article>
     </div>
   </div>
 </section>
 
 <!-- ================= RECORD ================= -->
-<section class="sec grid12" id="record">
-  <div class="sec-head">
-    <div class="sec-mark">06 / Record</div>
-    <h2 class="sec-title">Awards &amp; education</h2>
-    <div class="sec-rule"></div>
-  </div>
+<section class="sec" id="record">
+  <div class="inner">
+    <div class="sec-head">
+      <div class="sec-mark">06 / Record</div>
+      <h2 class="sec-title">Awards &amp; education</h2>
+      <div class="sec-rule"></div>
+    </div>
 
-  <div class="rec-left rv">
-    <div class="rec-sub">Honors &amp; Awards</div>
-    <div class="honor">
-      <span class="honor-year">2022</span>
-      <h4>Acceptance into New York University</h4>
-      <p>Computer Science &amp; Mathematics Program, Class of 2026.</p>
+    <div class="rec-col rv">
+      <div class="rec-sub">Honours &amp; awards</div>
+      <div class="rec-row">
+        <span class="rec-year">2022</span>
+        <h4>Acceptance into New York University</h4>
+        <p>Computer Science &amp; Mathematics program, Class of 2026.</p>
+      </div>
+      <div class="rec-row">
+        <span class="rec-year">2021</span>
+        <h4>Dera Natung Award for Academic Excellence</h4>
+        <p>Government of Arunachal Pradesh.</p>
+      </div>
+      <div class="rec-row">
+        <span class="rec-year">2019</span>
+        <h4>State Merit Scholarship</h4>
+        <p>Ranked 1<sup>st</sup> in the state, Government of Arunachal Pradesh.</p>
+      </div>
     </div>
-    <div class="honor">
-      <span class="honor-year">2021</span>
-      <h4>Dera Natung Award for Academic Excellence</h4>
-      <p>Government of Arunachal Pradesh.</p>
-    </div>
-    <div class="honor">
-      <span class="honor-year">2019</span>
-      <h4>State Merit Scholarship</h4>
-      <p>Ranked 1<sup>st</sup> in the state, Government of Arunachal Pradesh.</p>
-    </div>
-  </div>
 
-  <div class="rec-right rv">
-    <div class="rec-sub">Education</div>
-    <div class="edu">
-      <span class="edu-year">2023 – 2027</span>
-      <div class="edu-school">IISER Bhopal</div>
-      <div class="edu-detail">B.S. in Computer Science and Engineering · Expected Aug 2027</div>
-    </div>
-    <div class="edu">
-      <span class="edu-year">2020 – 2022</span>
-      <div class="edu-school">Vivekananda Kendra Vidyalaya, Nirjuli</div>
-      <div class="edu-detail">Higher Secondary (CBSE) · 95.3%</div>
-    </div>
-    <div class="edu">
-      <span class="edu-year">2010 – 2020</span>
-      <div class="edu-school">Vivekananda Kendra Vidyalaya, Nirjuli</div>
-      <div class="edu-detail">Secondary (CBSE) · 98% · Ranked 2<sup>nd</sup> in the state</div>
+    <div class="rec-col rv">
+      <div class="rec-sub">Education</div>
+      <div class="rec-row">
+        <span class="rec-year">2023 – 2027</span>
+        <div class="rec-school">IISER Bhopal</div>
+        <div class="rec-detail">B.S. in Computer Science and Engineering · Expected Aug 2027</div>
+      </div>
+      <div class="rec-row">
+        <span class="rec-year">2020 – 2022</span>
+        <div class="rec-school">Vivekananda Kendra Vidyalaya, Nirjuli</div>
+        <div class="rec-detail">Higher Secondary (CBSE) · 95.3%</div>
+      </div>
+      <div class="rec-row">
+        <span class="rec-year">2010 – 2020</span>
+        <div class="rec-school">Vivekananda Kendra Vidyalaya, Nirjuli</div>
+        <div class="rec-detail">Secondary (CBSE) · 98% · Ranked 2<sup>nd</sup> in the state</div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ================= CONTACT ================= -->
 <section class="contact" id="contact">
-  <div class="contact-pre rv">07 / Contact</div>
-  <h2 class="rv">I'm always up for a <em>good conversation</em>.</h2>
-  <p class="contact-note rv">Whether it's about research collaboration, a project idea, or just a recipe recommendation , I'd love to hear from you.</p>
-  <div class="contact-links rv">
-    <a href="mailto:biswadeep23@iiserb.ac.in" class="contact-link">biswadeep23@iiserb.ac.in</a>
-    <a href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener" class="contact-link">LinkedIn</a>
-    <a href="https://github.com/biswakim" target="_blank" rel="noopener" class="contact-link">GitHub</a>
+  <div class="contact-in">
+    <div class="contact-pre rv">07 / Contact</div>
+    <h2 class="rv">I'm always up for a <em>good conversation</em>.</h2>
+    <p class="contact-note rv">Whether it's about research collaboration, a project idea, or just a recipe recommendation — I'd love to hear from you.</p>
+    <div class="contact-links rv">
+      <a href="mailto:biswadeep23@iiserb.ac.in" class="contact-link">biswadeep23@iiserb.ac.in</a>
+      <a href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener" class="contact-link">LinkedIn</a>
+      <a href="https://github.com/biswakim" target="_blank" rel="noopener" class="contact-link">GitHub</a>
+    </div>
   </div>
 </section>
 
 <footer>
-  <span>© 2026 Biswadeep Chakraborty</span>
-  <span>Built with intention, not a template.</span>
+  <div class="footer-in">
+    <span>© 2026 Biswadeep Chakraborty</span>
+    <span>Built with intention, not a template.</span>
+  </div>
 </footer>
 
 <script>
 (function () {
   'use strict';
 
-  var SECTIONS = [
-    { id: 'about',      label: 'About',      idx: '01' },
-    { id: 'experience', label: 'Experience', idx: '02' },
-    { id: 'work',       label: 'Projects',   idx: '03' },
-    { id: 'toolkit',    label: 'Toolkit',    idx: '04' },
-    { id: 'record',     label: 'Record',     idx: '05' },
-    { id: 'extracurricular', label: 'Beyond Research', idx: '06' },
-    { id: 'contact',    label: 'Contact',    idx: '07' }
-  ];
-
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* =================================================================
+     OVERTURE — displacement interpolation
+     Two weight distributions (a 6-layer and a 12-layer parent model)
+     are matched by sliced optimal transport, transported to their
+     Wasserstein barycenter, then transported again onto the name.
+     ================================================================= */
+
+  var overture = document.getElementById('overture');
+  var otc = document.getElementById('ot');
+  var octx = otc.getContext('2d');
+  var otSub = document.getElementById('otSub');
+  var otRead = document.getElementById('otRead');
+  var rdT = document.getElementById('rdT');
+  var rdW = document.getElementById('rdW');
+  var rdPhase = document.getElementById('rdPhase');
+  var skipBtn = document.getElementById('otSkip');
+
+  var OW = 0, OH = 0, ODPR = 1;
+  var P = [];                 // particles
+  var N = 0;
+  var otRAF = null;
+  var otStart = 0;
+  var finished = false;
+
+  // phase boundaries (seconds)
+  var T_IN = 0.85, T_BARY = 2.45, T_HOLD1 = 2.85, T_NAME = 4.45, T_HOLD2 = 5.9, T_OUT = 6.8;
+
+  function sizeOverture() {
+    OW = window.innerWidth;
+    OH = window.innerHeight;
+    ODPR = Math.min(window.devicePixelRatio || 1, 2);
+    otc.width = Math.round(OW * ODPR);
+    otc.height = Math.round(OH * ODPR);
+    octx.setTransform(ODPR, 0, 0, ODPR, 0, 0);
+  }
+
+  function gauss() {
+    var u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  /* sample the name as a point cloud from an offscreen canvas */
+  function sampleName(count) {
+    var c = document.createElement('canvas');
+    var g = c.getContext('2d');
+    var w = Math.min(OW, 1400), h = Math.min(OH, 900);
+    c.width = w; c.height = h;
+
+    var twoLine = OW < 900;
+    var maxW = w * (twoLine ? 0.88 : 0.82);
+    var size = twoLine ? w * 0.16 : w * 0.11;
+
+    g.fillStyle = '#fff';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+
+    function setFont(s) {
+      g.font = '600 ' + s + 'px Fraunces, Georgia, serif';
+      try { g.letterSpacing = '0.01em'; } catch (e) {}
+    }
+
+    var l1 = 'BISWADEEP', l2 = 'CHAKRABORTY';
+    var lines = twoLine ? [l1, l2] : [l1 + ' ' + l2];
+
+    setFont(size);
+    var widest = 0, k;
+    for (k = 0; k < lines.length; k++) widest = Math.max(widest, g.measureText(lines[k]).width);
+    if (widest > maxW) { size = size * (maxW / widest); setFont(size); }
+
+    var cy = h * 0.46;
+    var lh = size * 1.02;
+    for (k = 0; k < lines.length; k++) {
+      var y = cy + (k - (lines.length - 1) / 2) * lh;
+      g.fillText(lines[k], w / 2, y);
+    }
+
+    var data = g.getImageData(0, 0, w, h).data;
+    var pts = [];
+    var step = w > 900 ? 3 : 2;
+    for (var y2 = 0; y2 < h; y2 += step) {
+      for (var x2 = 0; x2 < w; x2 += step) {
+        if (data[(y2 * w + x2) * 4 + 3] > 140) {
+          pts.push({ x: x2 + (OW - w) / 2, y: y2 + (OH - h) / 2 });
+        }
+      }
+    }
+
+    if (!pts.length) return null;
+
+    // resample to exactly `count` points
+    var out = [];
+    for (var i = 0; i < count; i++) {
+      var p = pts[(Math.random() * pts.length) | 0];
+      out.push({ x: p.x + (Math.random() - 0.5) * step, y: p.y + (Math.random() - 0.5) * step });
+    }
+    return out;
+  }
+
+  /* approximate optimal transport by sliced (Radon) matching:
+     repeatedly project on a random direction and sort-match. */
+  function slicedMatch(src, dst, iters) {
+    var n = src.length, i, k;
+    var perm = new Int32Array(n);
+    for (i = 0; i < n; i++) perm[i] = i;
+
+    var base = [];
+    for (i = 0; i < n; i++) base.push(i);
+
+    for (var it = 0; it < iters; it++) {
+      var a = Math.random() * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a);
+      var ps = new Float64Array(n), pd = new Float64Array(n);
+      for (i = 0; i < n; i++) {
+        ps[i] = src[i].x * ca + src[i].y * sa;
+        pd[i] = dst[perm[i]].x * ca + dst[perm[i]].y * sa;
+      }
+      var sS = base.slice().sort(function (p, q) { return ps[p] - ps[q]; });
+      var sD = base.slice().sort(function (p, q) { return pd[p] - pd[q]; });
+      var np = new Int32Array(n);
+      for (k = 0; k < n; k++) np[sS[k]] = perm[sD[k]];
+      perm = np;
+    }
+    return perm;
+  }
+
+  function buildOverture() {
+    sizeOverture();
+    N = OW < 760 ? 900 : (OW < 1200 ? 1500 : 2100);
+    if (N % 2) N -= 1;
+    var half = N / 2;
+
+    var cx = OW / 2, cy = OH * 0.46;
+    var spread = Math.min(OW, OH);
+    var offx = spread * 0.21, sig = spread * 0.062;
+
+    var A = [], B = [], i;
+    for (i = 0; i < half; i++) {
+      A.push({ x: cx - offx + gauss() * sig * 1.15, y: cy + gauss() * sig });
+      B.push({ x: cx + offx + gauss() * sig, y: cy + gauss() * sig * 1.3 });
+    }
+
+    // 1) match the two parents, midpoint = barycenter for t = 1/2
+    var pairing = slicedMatch(A, B, 7);
+
+    P = [];
+    var cost0 = 0;
+    for (i = 0; i < half; i++) {
+      var b = B[pairing[i]];
+      var mx = (A[i].x + b.x) / 2, my = (A[i].y + b.y) / 2;
+      var dx = A[i].x - b.x, dy = A[i].y - b.y;
+      cost0 += (dx * dx + dy * dy) / half;
+
+      P.push({ sx: A[i].x, sy: A[i].y, bx: mx, by: my, tx: 0, ty: 0, src: 0,
+               d: Math.random(), tw: 0.9 + Math.random() * 0.6, partner: half + i });
+      P.push({ sx: b.x, sy: b.y, bx: mx, by: my, tx: 0, ty: 0, src: 1,
+               d: Math.random(), tw: 0.9 + Math.random() * 0.6, partner: i });
+    }
+
+    // 2) match the barycenter cloud to the name cloud
+    var name = sampleName(N);
+    if (name) {
+      var bary = P.map(function (p) { return { x: p.bx, y: p.by }; });
+      var perm2 = slicedMatch(bary, name, 8);
+      for (i = 0; i < N; i++) { P[i].tx = name[perm2[i]].x; P[i].ty = name[perm2[i]].y; }
+    } else {
+      for (i = 0; i < N; i++) { P[i].tx = P[i].bx; P[i].ty = P[i].by; }
+    }
+
+    return Math.sqrt(cost0) / (spread * 0.5);
+  }
+
+  var W0 = 1;
+
+  function easeIO(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+
+  function drawOverture(now) {
+    var t = (now - otStart) / 1000;
+    octx.clearRect(0, 0, OW, OH);
+
+    var i, p, x, y, prog;
+
+    var toBary = clamp01((t - T_IN) / (T_BARY - T_IN));
+    var toName = clamp01((t - T_HOLD1) / (T_NAME - T_HOLD1));
+    var fadeIn = clamp01(t / 0.7);
+    var exit = clamp01((t - T_HOLD2) / (T_OUT - T_HOLD2));
+
+    // readouts
+    if (t > 0.5) otRead.classList.add('on');
+    var tv = toName > 0 ? 0.5 + 0.5 * easeIO(toName) : 0.5 * easeIO(toBary);
+    rdT.textContent = tv.toFixed(2);
+    var wv = toName > 0 ? 0 : W0 * (1 - easeIO(toBary));
+    rdW.textContent = wv < 0.0005 ? '0.000' : wv.toFixed(3);
+    if (t > T_HOLD1) rdPhase.textContent = 'transport to representation';
+    else if (t > T_IN) rdPhase.textContent = 'Wasserstein barycenter';
+    if (t > T_NAME + 0.15) otSub.classList.add('on');
+    if (exit > 0) { otRead.classList.remove('on'); }
+
+    // transport threads (the coupling) while the parents converge
+    if (toBary > 0 && toBary < 1) {
+      var lineAlpha = 0.16 * Math.sin(Math.PI * toBary);
+      octx.lineWidth = 0.6;
+      octx.strokeStyle = 'rgba(168,124,204,' + lineAlpha + ')';
+      octx.beginPath();
+      for (i = 0; i < N; i += 6) {
+        p = P[i];
+        if (p.src !== 0) continue;
+        var q = P[p.partner];
+        var e1 = easeIO(clamp01((toBary - p.d * 0.18) / (1 - p.d * 0.18)));
+        var e2 = easeIO(clamp01((toBary - q.d * 0.18) / (1 - q.d * 0.18)));
+        octx.moveTo(p.sx + (p.bx - p.sx) * e1, p.sy + (p.by - p.sy) * e1);
+        octx.lineTo(q.sx + (q.bx - q.sx) * e2, q.sy + (q.by - q.sy) * e2);
+      }
+      octx.stroke();
+    }
+
+    for (i = 0; i < N; i++) {
+      p = P[i];
+
+      if (toName > 0) {
+        prog = easeIO(clamp01((toName - p.d * 0.22) / (1 - p.d * 0.22)));
+        // slight arc so the transport reads as motion, not a cut
+        var mid = Math.sin(Math.PI * prog);
+        x = p.bx + (p.tx - p.bx) * prog + (p.src ? 1 : -1) * mid * 12 * (0.5 - p.d);
+        y = p.by + (p.ty - p.by) * prog - mid * 18 * (0.5 - p.d);
+      } else {
+        prog = easeIO(clamp01((toBary - p.d * 0.18) / (1 - p.d * 0.18)));
+        x = p.sx + (p.bx - p.sx) * prog;
+        y = p.sy + (p.by - p.sy) * prog;
+      }
+
+      var a = fadeIn * (0.55 + 0.45 * p.tw * 0.6);
+
+      if (exit > 0) {
+        var e = easeIO(exit);
+        y -= e * (60 + p.d * 220);
+        x += (p.d - 0.5) * e * 90;
+        a *= (1 - e);
+      }
+
+      // colour: two distributions with distinct casts, blending as they fuse
+      var blend = toName > 0 ? 1 : easeIO(toBary);
+      var r, gg, bb;
+      if (p.src === 0) { r = 201 + (238 - 201) * blend; gg = 168 + (225 - 168) * blend; bb = 224 + (248 - 224) * blend; }
+      else { r = 238 + (238 - 238) * blend; gg = 214 + (225 - 214) * blend; bb = 190 + (248 - 190) * blend; }
+
+      octx.fillStyle = 'rgba(' + (r | 0) + ',' + (gg | 0) + ',' + (bb | 0) + ',' + a.toFixed(3) + ')';
+      var s = toName > 0.85 ? 1.7 : 1.5;
+      octx.fillRect(x, y, s, s);
+    }
+
+    if (t >= T_OUT && !finished) { endOverture(); return; }
+    otRAF = requestAnimationFrame(drawOverture);
+  }
+
+  function endOverture() {
+    if (finished) return;
+    finished = true;
+    if (otRAF) cancelAnimationFrame(otRAF);
+    overture.classList.add('done');
+    document.body.classList.remove('locked');
+    try { sessionStorage.setItem('bc_seen', '1'); } catch (e) {}
+    setTimeout(function () { overture.classList.add('gone'); }, 900);
+    startStage();
+  }
+
+  var seen = false;
+  try { seen = sessionStorage.getItem('bc_seen') === '1'; } catch (e) {}
+
+  skipBtn.addEventListener('click', endOverture);
+  overture.addEventListener('click', function (e) { if (e.target !== skipBtn) endOverture(); });
+  window.addEventListener('keydown', function (e) {
+    if (!finished && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) endOverture();
+  });
+
+  /* =================================================================
+     STAGE — the neural navigation
+     ================================================================= */
+
+  var SECTIONS = [
+    { id: 'about',      label: 'About',    idx: '01' },
+    { id: 'experience', label: 'Research', idx: '02' },
+    { id: 'work',       label: 'Projects', idx: '03' },
+    { id: 'toolkit',    label: 'Toolkit',  idx: '04' },
+    { id: 'beyond',     label: 'Beyond',   idx: '05' },
+    { id: 'record',     label: 'Record',   idx: '06' },
+    { id: 'contact',    label: 'Contact',  idx: '07' }
+  ];
 
   var cvs = document.getElementById('net');
   var ctx = cvs.getContext('2d');
@@ -1042,18 +1478,17 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
 
   var W = 0, H = 0, vertical = false;
   var nodes = [], edges = [], pulses = [], buttons = [], caps = [];
-  var hover = -1, start = performance.now();
+  var hover = -1, start = performance.now(), stageOn = false;
   var mouse = { x: 0, y: 0, on: false };
+  var HID = 4, OUT0 = 1 + HID;
 
   function lerp(a, b, t) { return a + (b - a) * t; }
-  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
-  function ease(t) { return 1 - Math.pow(1 - t, 3); }
+  function ease3(t) { return 1 - Math.pow(1 - t, 3); }
 
-  /* ---------- build the network ---------- */
   function build() {
     var rect = stage.getBoundingClientRect();
     W = rect.width; H = rect.height;
-    vertical = W < 820;
+    vertical = W < 860;
 
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     cvs.width = Math.round(W * dpr);
@@ -1061,34 +1496,25 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     nodes = []; edges = [];
-
-    var HID = 4;
-    var i, j;
+    var i, j, S = SECTIONS.length;
 
     if (!vertical) {
-      nodes.push(mk(W * 0.17, H * 0.52, 10, 0, 'in'));
-      for (i = 0; i < HID; i++) {
-        nodes.push(mk(W * 0.44, lerp(H * 0.24, H * 0.80, i / (HID - 1)), 5.5, 1, 'hid'));
-      }
-      for (i = 0; i < SECTIONS.length; i++) {
-        nodes.push(mk(W * 0.70, lerp(H * 0.13, H * 0.91, i / (SECTIONS.length - 1)), 7, 2, 'out'));
-      }
+      nodes.push(mk(W * 0.16, H * 0.52, 10, 0, 'in'));
+      for (i = 0; i < HID; i++) nodes.push(mk(W * 0.42, lerp(H * 0.26, H * 0.78, i / (HID - 1)), 5.5, 1, 'hid'));
+      for (i = 0; i < S; i++) nodes.push(mk(W * 0.68, lerp(H * 0.18, H * 0.86, i / (S - 1)), 7, 2, 'out'));
     } else {
-      nodes.push(mk(W * 0.5, H * 0.13, 9, 0, 'in'));
-      for (i = 0; i < HID; i++) {
-        nodes.push(mk(lerp(W * 0.16, W * 0.84, i / (HID - 1)), H * 0.30, 5, 1, 'hid'));
-      }
-      for (i = 0; i < SECTIONS.length; i++) {
+      var rows = Math.ceil(S / 2);
+      nodes.push(mk(W * 0.5, H * 0.12, 9, 0, 'in'));
+      for (i = 0; i < HID; i++) nodes.push(mk(lerp(W * 0.16, W * 0.84, i / (HID - 1)), H * 0.27, 5, 1, 'hid'));
+      for (i = 0; i < S; i++) {
         var col = i % 2, row = Math.floor(i / 2);
-        nodes.push(mk(col === 0 ? W * 0.27 : W * 0.73, lerp(H * 0.44, H * 0.76, row / 3), 6.5, 2, 'out'));
+        nodes.push(mk(col === 0 ? W * 0.28 : W * 0.72, lerp(H * 0.43, H * 0.74, row / Math.max(1, rows - 1)), 6.5, 2, 'out'));
       }
     }
 
     for (i = 1; i <= HID; i++) edges.push({ a: 0, b: i, w: 0.45 + Math.random() * 0.55 });
     for (i = 1; i <= HID; i++) {
-      for (j = 0; j < SECTIONS.length; j++) {
-        edges.push({ a: i, b: HID + 1 + j, w: 0.3 + Math.random() * 0.7 });
-      }
+      for (j = 0; j < S; j++) edges.push({ a: i, b: OUT0 + j, w: 0.3 + Math.random() * 0.7 });
     }
 
     placeButtons();
@@ -1100,17 +1526,17 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       ph: Math.random() * Math.PI * 2,
       sp: 0.25 + Math.random() * 0.3,
       amp: kind === 'in' ? 3 : 6,
-      delay: 0.25 + layerIdx * 0.55 + Math.random() * 0.22,
+      delay: 0.2 + layerIdx * 0.42 + Math.random() * 0.2,
       app: 0, glow: 0
     };
   }
 
-  /* ---------- overlay buttons ---------- */
   function placeButtons() {
     if (!buttons.length) {
       SECTIONS.forEach(function (s, i) {
         var b = document.createElement('button');
         b.className = 'node-btn';
+        b.type = 'button';
         b.innerHTML = '<span class="idx">' + s.idx + '</span><span>' + s.label + '</span>';
         b.setAttribute('aria-label', 'Open ' + s.label + ' section');
         b.addEventListener('click', function () { fire(i); });
@@ -1123,7 +1549,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       });
     }
     if (!caps.length) {
-      ['input', 'hidden', 'outputs'].forEach(function (txt) {
+      ['input', 'hidden', 'sections'].forEach(function (txt) {
         var c = document.createElement('span');
         c.className = 'layer-cap';
         c.textContent = txt;
@@ -1132,23 +1558,24 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
         caps.push(c);
       });
     }
-    var capNodes = [nodes[0], nodes[1], nodes[5]];
+
+    var capNodes = [nodes[0], nodes[1], nodes[OUT0]];
     caps.forEach(function (c, k) {
       if (vertical || !capNodes[k]) { c.style.display = 'none'; return; }
       c.style.display = 'block';
       c.style.left = capNodes[k].bx + 'px';
-      c.style.top = (capNodes[k].by - 34) + 'px';
-      setTimeout(function () { c.classList.add('on'); }, 400);
+      c.style.top = (capNodes[k].by - 32) + 'px';
+      setTimeout(function () { c.classList.add('on'); }, 500);
     });
 
     buttons.forEach(function (b, i) {
-      var n = nodes[5 + i];
+      var n = nodes[OUT0 + i];
       if (!n) return;
-      b.classList.remove('left', 'right', 'below');
+      b.classList.remove('right', 'below');
       if (vertical) {
         b.classList.add('below');
         b.style.left = n.bx + 'px';
-        b.style.top = (n.by + 14) + 'px';
+        b.style.top = (n.by + 13) + 'px';
       } else {
         b.classList.add('right');
         b.style.left = (n.bx + 20) + 'px';
@@ -1157,9 +1584,8 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
     });
   }
 
-  /* ---------- firing a node ---------- */
   function fire(i) {
-    var target = 5 + i;
+    var target = OUT0 + i;
     var n = nodes[target];
     if (n) n.glow = 1;
     edges.forEach(function (e) {
@@ -1173,14 +1599,13 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
     sec.classList.add('bloom');
     setTimeout(function () {
       sec.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
-    }, REDUCED ? 0 : 380);
+    }, REDUCED ? 0 : 360);
   }
 
   function spawn(e, speed, delay) {
     pulses.push({ e: e, p: -(delay || 0), sp: speed || (0.45 + Math.random() * 0.4) });
   }
 
-  /* ---------- draw ---------- */
   function draw(now) {
     var t = (now - start) / 1000;
     ctx.clearRect(0, 0, W, H);
@@ -1200,17 +1625,16 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
         }
       }
       n.x = x; n.y = y;
-      n.app = REDUCED ? 1 : ease(clamp01((t - n.delay) / 0.9));
+      n.app = REDUCED ? 1 : ease3(Math.max(0, Math.min(1, (t - n.delay) / 0.9)));
       n.glow *= 0.955;
     });
 
-    // edges
     edges.forEach(function (e) {
       var a = nodes[e.a], b = nodes[e.b];
       var p = Math.min(a.app, b.app);
       if (p <= 0.01) return;
-      var lit = hover >= 0 && (e.a === 0 || e.b === 5 + hover);
-      var alpha = (lit ? 0.46 : 0.17) * e.w * p;
+      var lit = hover >= 0 && (e.a === 0 || e.b === OUT0 + hover);
+      var alpha = (lit ? 0.46 : 0.16) * e.w * p;
       ctx.strokeStyle = lit ? 'rgba(196,150,224,' + alpha + ')' : 'rgba(184,166,201,' + alpha + ')';
       ctx.lineWidth = lit ? 1.1 : 0.75;
       ctx.beginPath();
@@ -1219,7 +1643,6 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       ctx.stroke();
     });
 
-    // pulses
     for (var i = pulses.length - 1; i >= 0; i--) {
       var pl = pulses[i];
       pl.p += pl.sp * 0.016;
@@ -1238,10 +1661,9 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       ctx.beginPath(); ctx.arc(px, py, 1.7, 0, 6.2832); ctx.fill();
     }
 
-    // nodes
     nodes.forEach(function (n, i) {
       if (n.app <= 0.01) return;
-      var isHover = hover >= 0 && i === 5 + hover;
+      var isHover = hover >= 0 && i === OUT0 + hover;
       var r = n.r * (0.6 + 0.4 * n.app) * (isHover ? 1.45 : 1) * (1 + n.glow * 0.5);
       var halo = r * (4.2 + n.glow * 3);
       var gr = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, halo);
@@ -1263,16 +1685,23 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
       }
     });
 
-    // reveal the labels once their nodes have arrived
     buttons.forEach(function (b, i) {
-      var n = nodes[5 + i];
+      var n = nodes[OUT0 + i];
       if (n && n.app > 0.55) b.classList.add('on');
     });
 
-    if (!REDUCED && Math.random() < 0.055 && pulses.length < 26 && t > 1.6) {
+    if (!REDUCED && Math.random() < 0.055 && pulses.length < 26 && t > 1.4) {
       spawn(edges[Math.floor(Math.random() * edges.length)]);
     }
 
+    requestAnimationFrame(draw);
+  }
+
+  function startStage() {
+    if (stageOn) return;
+    stageOn = true;
+    build();
+    start = performance.now();
     requestAnimationFrame(draw);
   }
 
@@ -1280,7 +1709,10 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
   var rt;
   window.addEventListener('resize', function () {
     clearTimeout(rt);
-    rt = setTimeout(function () { build(); }, 140);
+    rt = setTimeout(function () {
+      if (stageOn) build();
+      if (!finished) { sizeOverture(); }
+    }, 140);
   });
 
   stage.addEventListener('pointermove', function (e) {
@@ -1289,19 +1721,32 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); 
   });
   stage.addEventListener('pointerleave', function () { mouse.on = false; });
 
-  build();
-  requestAnimationFrame(draw);
-
-  /* ---------- scroll reveal + nav ---------- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) { if (en.isIntersecting) en.target.classList.add('vis'); });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
 
   var topnav = document.getElementById('topnav');
   new IntersectionObserver(function (entries) {
     topnav.classList.toggle('show', !entries[0].isIntersecting);
   }, { threshold: 0.15 }).observe(stage);
+
+  /* ---------- boot ---------- */
+  function runOverture() {
+    if (REDUCED || seen || window.location.hash) { endOverture(); return; }
+    W0 = buildOverture();
+    otStart = performance.now();
+    otRAF = requestAnimationFrame(drawOverture);
+  }
+
+  if (document.fonts && document.fonts.ready) {
+    var booted = false;
+    var boot = function () { if (!booted) { booted = true; runOverture(); } };
+    document.fonts.ready.then(boot);
+    setTimeout(boot, 1200);
+  } else {
+    runOverture();
+  }
 })();
 </script>
 
