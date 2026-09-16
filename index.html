@@ -241,6 +241,15 @@ a { color: inherit; }
 .node-btn .idx { font-size: 0.56rem; color: var(--accent-bright); }
 .node-btn.right { transform: translate(0, -50%); }
 .node-btn.below { transform: translate(-50%, 0); }
+.node-btn.above { transform: translate(-50%, -100%); }
+
+.node-btn.cv {
+  color: var(--accent-light);
+  text-decoration: none;
+  letter-spacing: 0.18em;
+}
+
+.node-btn.cv:hover { color: #fff; }
 
 .layer-cap {
   position: absolute;
@@ -1252,6 +1261,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
       <a href="mailto:biswadeep23@iiserb.ac.in" class="contact-link">biswadeep23@iiserb.ac.in</a>
       <a href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener" class="contact-link">LinkedIn</a>
       <a href="https://github.com/biswakim" target="_blank" rel="noopener" class="contact-link">GitHub</a>
+      <a href="cv.pdf" target="_blank" rel="noopener" class="contact-link">CV ↗</a>
     </div>
   </div>
 </section>
@@ -1567,6 +1577,8 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
   var W = 0, H = 0, vertical = false;
   var nodes = [], edges = [], pulses = [], buttons = [], caps = [];
   var hover = -1, start = performance.now(), stageOn = false;
+  var cvHover = false, cvBtn = null;
+  var CVN = 2;                       // the hidden unit that holds the CV
   var mouse = { x: 0, y: 0, on: false };
   var HID = 4, OUT0 = 1 + HID;
 
@@ -1604,6 +1616,8 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
     for (i = 1; i <= HID; i++) {
       for (j = 0; j < S; j++) edges.push({ a: i, b: OUT0 + j, w: 0.3 + Math.random() * 0.7 });
     }
+
+    if (nodes[CVN]) { nodes[CVN].cv = true; nodes[CVN].r = 7; }
 
     placeButtons();
   }
@@ -1645,6 +1659,30 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
         layer.appendChild(c);
         caps.push(c);
       });
+    }
+
+    if (!cvBtn) {
+      cvBtn = document.createElement('a');
+      cvBtn.className = 'node-btn cv above';
+      cvBtn.href = 'cv.pdf';
+      cvBtn.target = '_blank';
+      cvBtn.rel = 'noopener';
+      cvBtn.innerHTML = '<span class="idx">\u2197</span><span>CV</span>';
+      cvBtn.setAttribute('aria-label', 'Open CV (PDF, new tab)');
+      cvBtn.addEventListener('mouseenter', function () { cvHover = true; });
+      cvBtn.addEventListener('mouseleave', function () { cvHover = false; });
+      cvBtn.addEventListener('focus', function () { cvHover = true; });
+      cvBtn.addEventListener('blur', function () { cvHover = false; });
+      cvBtn.addEventListener('click', function () {
+        var n = nodes[CVN];
+        if (n) n.glow = 1;
+        edges.forEach(function (e) { if (e.a === CVN || e.b === CVN) spawn(e, 1.6); });
+      });
+      layer.appendChild(cvBtn);
+    }
+    if (nodes[CVN]) {
+      cvBtn.style.left = nodes[CVN].bx + 'px';
+      cvBtn.style.top = (nodes[CVN].by - 14) + 'px';
     }
 
     var capNodes = [nodes[0], nodes[1], nodes[OUT0]];
@@ -1721,7 +1759,8 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
       var a = nodes[e.a], b = nodes[e.b];
       var p = Math.min(a.app, b.app);
       if (p <= 0.01) return;
-      var lit = hover >= 0 && (e.a === 0 || e.b === OUT0 + hover);
+      var lit = (hover >= 0 && (e.a === 0 || e.b === OUT0 + hover)) ||
+                (cvHover && (e.a === CVN || e.b === CVN));
       var alpha = (lit ? 0.46 : 0.16) * e.w * p;
       ctx.strokeStyle = lit ? 'rgba(196,150,224,' + alpha + ')' : 'rgba(184,166,201,' + alpha + ')';
       ctx.lineWidth = lit ? 1.1 : 0.75;
@@ -1751,7 +1790,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
 
     nodes.forEach(function (n, i) {
       if (n.app <= 0.01) return;
-      var isHover = hover >= 0 && i === OUT0 + hover;
+      var isHover = (hover >= 0 && i === OUT0 + hover) || (n.cv && cvHover);
       var r = n.r * (0.6 + 0.4 * n.app) * (isHover ? 1.45 : 1) * (1 + n.glow * 0.5);
       var halo = r * (4.2 + n.glow * 3);
       var gr = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, halo);
@@ -1761,10 +1800,16 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
       ctx.fillStyle = gr;
       ctx.beginPath(); ctx.arc(n.x, n.y, halo, 0, 6.2832); ctx.fill();
 
-      ctx.fillStyle = n.kind === 'hid'
+      ctx.fillStyle = (n.kind === 'hid' && !n.cv)
         ? 'rgba(201,178,214,' + (0.55 * n.app) + ')'
         : 'rgba(245,238,250,' + (0.92 * n.app) + ')';
       ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 6.2832); ctx.fill();
+
+      if (n.cv) {
+        ctx.strokeStyle = 'rgba(201,178,214,' + (0.45 * n.app) + ')';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(n.x, n.y, r + 7 + Math.sin(t * 1.8) * 1.8, 0, 6.2832); ctx.stroke();
+      }
 
       if (n.kind === 'in') {
         ctx.strokeStyle = 'rgba(201,178,214,' + (0.5 * n.app) + ')';
@@ -1777,6 +1822,8 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
       var n = nodes[OUT0 + i];
       if (n && n.app > 0.55) b.classList.add('on');
     });
+
+    if (cvBtn && nodes[CVN] && nodes[CVN].app > 0.55) cvBtn.classList.add('on');
 
     if (!REDUCED && Math.random() < 0.055 && pulses.length < 26 && t > 1.4) {
       spawn(edges[Math.floor(Math.random() * edges.length)]);
