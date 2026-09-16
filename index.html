@@ -560,12 +560,12 @@ a { color: inherit; }
 .cards {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--gap);
   grid-auto-rows: 1fr;
 }
 
-.cards.duo { grid-template-columns: repeat(3, 1fr); }
+.cards.duo { grid-template-columns: repeat(2, 1fr); }
 
 .wk {
   display: flex;
@@ -770,6 +770,82 @@ footer { background: var(--night); border-top: 1px solid var(--night-line); }
 }
 
 footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-muted); letter-spacing: 0.08em; }
+
+/* ================= INTERLUDE ================= */
+.interlude { padding-top: 0; }
+
+.morph-wrap {
+  grid-column: 1 / -1;
+  background: var(--night);
+  border: 1px solid var(--night-line);
+  padding: 1.75rem 1.75rem 1.4rem;
+}
+
+.morph-head { max-width: 62ch; margin-bottom: 1.25rem; }
+
+.morph-head h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  color: var(--night-fg);
+  margin-bottom: 0.5rem;
+}
+
+.morph-head p { font-size: 0.875rem; line-height: 1.75; color: #a7a2b4; }
+
+.morph-stage { width: 100%; position: relative; }
+.morph-stage canvas { display: block; width: 100%; }
+
+.morph-ctl {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: #6f6a7c;
+}
+
+.morph-end { white-space: nowrap; }
+.morph-read { margin-left: auto; white-space: nowrap; }
+.morph-read b { font-weight: 400; color: var(--accent-light); }
+
+#morphT {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 1px;
+  background: var(--night-line);
+  outline: none;
+  cursor: grab;
+}
+
+#morphT:active { cursor: grabbing; }
+
+#morphT::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  border: 0;
+  cursor: grab;
+}
+
+#morphT::-moz-range-thumb {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  border: 0;
+  cursor: grab;
+}
+
+@media (max-width: 860px) {
+  .morph-wrap { padding: 1.25rem 1.1rem 1.1rem; }
+  .morph-ctl { flex-wrap: wrap; }
+  .morph-read { margin-left: 0; }
+}
 
 /* ================= REVEAL ================= */
 .rv { opacity: 0; transform: translateY(18px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
@@ -996,9 +1072,9 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
         <div class="wk-meta">CNN · GAN · Style Transfer · Jan 2026 –</div>
       </article>
 
-      <article class="wk rv">
-        <div class="wk-top">Heterogeneous transformer fusion along statistical manifolds: a Bures–Wasserstein approach<span>CCU Taiwan</span><span class="wk-live">Ongoing</span></div>
-        <h3></h3>
+      <article class="wk is-live rv">
+        <div class="wk-top"><span>CCU Taiwan</span><span class="wk-live">Ongoing</span></div>
+        <h3>Heterogeneous transformer fusion along statistical manifolds: a Bures–Wasserstein approach</h3>
         <p>Fusing heterogeneous vision transformers by formulating model fusion as a computational graph alignment problem. Fused Gromov–Wasserstein transport handles the macro structure, Wasserstein barycentric synthesis resolves the depth mismatch without heuristic identity padding, and Sinkhorn alignment handles parameters.</p>
         <div class="wk-meta">Optimal Transport · FGW · Sinkhorn</div>
       </article>
@@ -1015,6 +1091,25 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
         <h3>Code, notebooks and experiments</h3>
         <p>Everything else lives on GitHub ↗</p>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INTERLUDE ================= -->
+<section class="sec interlude" id="interlude">
+  <div class="inner">
+    <div class="morph-wrap rv">
+      <div class="morph-head">
+        <h3>Motif ⇄ model</h3>
+        <p>Two of the projects above are the same question asked twice. Drag the handle: a handloom motif is carried onto a network by a sliced optimal-transport plan, solved in your browser. It is the same displacement interpolation the opening sequence runs on — only here the endpoints are a loom and a graph.</p>
+      </div>
+      <div class="morph-stage" id="morph"><canvas id="morphCanvas"></canvas></div>
+      <div class="morph-ctl">
+        <span class="morph-end">motif</span>
+        <input id="morphT" type="range" min="0" max="100" value="0" step="1" aria-label="Transport the motif onto the model">
+        <span class="morph-end">model</span>
+        <span class="morph-read">t <b id="morphRead">0.00</b></span>
+      </div>
     </div>
   </div>
 </section>
@@ -1067,6 +1162,13 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
     </div>
 
     <div class="cards duo">
+      <article class="wk rv">
+        <div class="wk-top"><span>Co-founder</span></div>
+        <h3>NEVISTA</h3>
+        <p>Co-founder of NEVISTA, the first Northeast fest at IISER Bhopal, and its first Convenor. A first edition inherits no template: the format, the programme and the team were all built from nothing, which is a different kind of problem from any of the ones above.</p>
+        <div class="wk-meta">Co-founder · First Convenor</div>
+      </article>
+
       <article class="wk rv">
         <div class="wk-top"><span>Co-founder</span></div>
         <h3>Be the Voice</h3>
@@ -1157,7 +1259,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
 <footer>
   <div class="footer-in">
     <span>© 2026 Biswadeep Chakraborty</span>
-    <span>Cooked with love and compassion</span></span>
+    <span>Cooked with love and compassion</span>
   </div>
 </footer>
 
@@ -1716,6 +1818,150 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
   new IntersectionObserver(function (entries) {
     topnav.classList.toggle('show', !entries[0].isIntersecting);
   }, { threshold: 0.15 }).observe(stage);
+
+  /* =================================================================
+     INTERLUDE — a handloom motif transported onto a network
+     ================================================================= */
+  (function () {
+    var wrap = document.getElementById('morph');
+    if (!wrap) return;
+    var mc = document.getElementById('morphCanvas');
+    var mctx = mc.getContext('2d');
+    var slider = document.getElementById('morphT');
+    var readT = document.getElementById('morphRead');
+
+    var MW = 0, MH = 0, MN = 0, MP = [];
+    var target = 0, cur = 0, raf = null, demoed = false;
+
+    function seg(out, x1, y1, x2, y2, sp) {
+      var d = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+      var n = Math.max(2, Math.round(d / sp));
+      for (var i = 0; i <= n; i++) {
+        var u = i / n;
+        out.push({ x: x1 + (x2 - x1) * u, y: y1 + (y2 - y1) * u });
+      }
+    }
+
+    function motifPoints() {
+      var o = [], w = MW, h = MH, sp = 3.4, i;
+      [0.12, 0.165, 0.835, 0.88].forEach(function (f) { seg(o, w * 0.05, h * f, w * 0.95, h * f, sp); });
+      [0.29, 0.71].forEach(function (f) {
+        var amp = h * 0.05, per = Math.max(34, w * 0.062), x = w * 0.05, up = true;
+        while (x < w * 0.95) {
+          var nx = Math.min(w * 0.95, x + per);
+          seg(o, x, h * f + (up ? amp : -amp), nx, h * f + (up ? -amp : amp), sp);
+          x = nx; up = !up;
+        }
+      });
+      var s = h * 0.135, y = h * 0.5, x2 = w * 0.06;
+      while (x2 + s * 1.7 < w * 0.95) {
+        var c = x2 + s * 0.85;
+        seg(o, c - s * 0.85, y, c, y - s, sp); seg(o, c, y - s, c + s * 0.85, y, sp);
+        seg(o, c + s * 0.85, y, c, y + s, sp); seg(o, c, y + s, c - s * 0.85, y, sp);
+        seg(o, c - s * 0.36, y, c, y - s * 0.44, sp); seg(o, c, y - s * 0.44, c + s * 0.36, y, sp);
+        seg(o, c + s * 0.36, y, c, y + s * 0.44, sp); seg(o, c, y + s * 0.44, c - s * 0.36, y, sp);
+        x2 += s * 1.85;
+      }
+      return o;
+    }
+
+    function netPoints() {
+      var o = [], w = MW, h = MH, cols = [0.15, 0.38, 0.62, 0.85], counts = [3, 5, 5, 3], L = [], i, j, k;
+      for (i = 0; i < cols.length; i++) {
+        var c = [];
+        for (j = 0; j < counts[i]; j++) c.push({ x: w * cols[i], y: h * 0.5 + (j - (counts[i] - 1) / 2) * (h * 0.165) });
+        L.push(c);
+      }
+      for (i = 0; i < L.length - 1; i++)
+        for (j = 0; j < L[i].length; j++)
+          for (k = 0; k < L[i + 1].length; k++)
+            seg(o, L[i][j].x, L[i][j].y, L[i + 1][k].x, L[i + 1][k].y, 10);
+      L.forEach(function (c) {
+        c.forEach(function (n) {
+          for (var m = 0; m < 30; m++) {
+            var a = Math.random() * 6.2832, r = Math.sqrt(Math.random()) * h * 0.034;
+            o.push({ x: n.x + Math.cos(a) * r, y: n.y + Math.sin(a) * r });
+          }
+        });
+      });
+      return o;
+    }
+
+    function resample(pts, n) {
+      var o = [];
+      for (var i = 0; i < n; i++) {
+        var p = pts[(Math.random() * pts.length) | 0];
+        o.push({ x: p.x + (Math.random() - 0.5) * 1.8, y: p.y + (Math.random() - 0.5) * 1.8 });
+      }
+      return o;
+    }
+
+    function buildMorph() {
+      var r = wrap.getBoundingClientRect();
+      MW = Math.max(240, r.width);
+      MH = Math.max(200, Math.min(320, MW * 0.36));
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      mc.style.height = MH + 'px';
+      mc.width = Math.round(MW * dpr);
+      mc.height = Math.round(MH * dpr);
+      mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      MN = MW < 700 ? 800 : 1200;
+      var A = resample(motifPoints(), MN);
+      var B = resample(netPoints(), MN);
+      var perm = slicedMatch(A, B, 8);
+      MP = [];
+      for (var i = 0; i < MN; i++) {
+        MP.push({ ax: A[i].x, ay: A[i].y, bx: B[perm[i]].x, by: B[perm[i]].y, d: Math.random() });
+      }
+    }
+
+    function drawMorph() {
+      cur += (target - cur) * 0.14;
+      if (Math.abs(target - cur) < 0.0015) cur = target;
+      mctx.clearRect(0, 0, MW, MH);
+
+      for (var i = 0; i < MN; i++) {
+        var p = MP[i];
+        var tt = Math.max(0, Math.min(1, (cur - p.d * 0.2) / 0.8));
+        var e = tt < 0.5 ? 4 * tt * tt * tt : 1 - Math.pow(-2 * tt + 2, 3) / 2;
+        var x = p.ax + (p.bx - p.ax) * e;
+        var y = p.ay + (p.by - p.ay) * e + Math.sin(Math.PI * e) * 12 * (0.5 - p.d);
+        var r = 214 + (201 - 214) * e, g = 158 + (178 - 158) * e, b = 98 + (228 - 98) * e;
+        mctx.fillStyle = 'rgba(' + (r | 0) + ',' + (g | 0) + ',' + (b | 0) + ',0.82)';
+        mctx.fillRect(x, y, 1.6, 1.6);
+      }
+
+      readT.textContent = cur.toFixed(2);
+      if (cur !== target) { raf = requestAnimationFrame(drawMorph); } else { raf = null; }
+    }
+
+    function kick() { if (raf === null) raf = requestAnimationFrame(drawMorph); }
+
+    slider.addEventListener('input', function () { target = slider.value / 100; kick(); });
+
+    buildMorph();
+    drawMorph();
+
+    var mrt;
+    window.addEventListener('resize', function () {
+      clearTimeout(mrt);
+      mrt = setTimeout(function () { buildMorph(); cur = target; drawMorph(); }, 180);
+    });
+
+    if (!REDUCED) {
+      new IntersectionObserver(function (ent, obs) {
+        if (!ent[0].isIntersecting || demoed) return;
+        demoed = true;
+        obs.disconnect();
+        var step = function (v, back) {
+          target = v; slider.value = Math.round(v * 100); kick();
+          if (back) setTimeout(function () { step(0, false); }, 1500);
+        };
+        setTimeout(function () { step(0.66, true); }, 450);
+      }, { threshold: 0.4 }).observe(wrap);
+    }
+  })();
 
   /* ---------- boot ---------- */
   function runOverture() {
