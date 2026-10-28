@@ -1031,7 +1031,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
         <div class="exp-where">IIT Mandi<br>Summer Research Intern</div>
         <div class="exp-date">Jun 2025 – Jul 2025<br>Mandi, HP</div>
       </div>
-      <div class="exp-body">Research experience
+      <div class="exp-body">
         <h3 class="exp-role">Drone surveillance &amp; trajectory prediction</h3>
         <p class="exp-desc">Under Dr Dinesh Singh, I worked on two problems at the intersection of optimisation and machine learning. First: scheduling drone patrols to minimise flight time under patrol-interval constraints — ILP, Greedy, Simulated Annealing and a novel multi-stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal) for high coverage at reduced runtime. Second: the Trajectron model for multi-agent trajectory prediction using CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY with competitive ADE/FDE/NLL and outperforming baselines such as SGAN.</p>
         <div class="exp-tags">
@@ -1213,7 +1213,6 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
     <div class="rec-col rv">
       <div class="rec-sub">Honours &amp; awards</div>
       <div class="rec-row">
-      <div class="rec-row">
         <span class="rec-year">2021</span>
         <h4>Dera Natung Award for Academic Excellence</h4>
         <p>Government of Arunachal Pradesh.</p>
@@ -1223,7 +1222,8 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
         <h4>State Merit Scholarship</h4>
         <p>Ranked 1<sup>st</sup> in the state, Government of Arunachal Pradesh.</p>
       </div>
-      <span class="rec-year">2022</span>
+      <div class="rec-row">
+        <span class="rec-year">2022</span>
         <h4>Acceptance into New York University</h4>
         <p>Computer Science &amp; Mathematics program, Class of 2026.</p>
       </div>
@@ -1323,10 +1323,7 @@ footer span { font-family: var(--mono); font-size: 0.6rem; color: var(--night-mu
 
   /* sample the name as a point cloud from an offscreen canvas */
   function sampleName(count) {
-    var c = document.createElement('canvas');<span class="rec-year">2022</span>
-        <h4>Acceptance into New York University</h4>
-        <p>Computer Science &amp; Mathematics program, Class of 2026.</p>
-      </div>
+    var c = document.createElement('canvas');
     var g = c.getContext('2d');
     var w = Math.min(OW, 1400), h = Math.min(OH, 900);
     c.width = w; c.height = h;
