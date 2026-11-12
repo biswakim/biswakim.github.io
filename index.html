@@ -12,20 +12,20 @@
 :root {
   color-scheme: light;
 
-  --paper: #f7f4ee;
-  --paper-deep: #efebe1;
-  --paper-wash: #ece6f2;
-  --card: #fffdfa;
-  --paper-edge: #ddd6c8;
-  --rule: #cfc7b6;
+  --paper: #fbfdff;
+  --paper-deep: #eef4fa;
+  --paper-wash: #e9f1f8;
+  --card: #ffffff;
+  --paper-edge: #d4e0ec;
+  --rule: #b6c8d9;
 
-  --ink: #1a1813;
-  --ink-soft: #474338;
-  --muted: #827c6f;
+  --ink: #0f2030;
+  --ink-soft: #3a4e60;
+  --muted: #6a7e92;
 
-  --accent: #5d4078;
-  --accent-bright: #7f5ba4;
-  --accent-light: #b79fd1;
+  --accent: #1f5c8c;
+  --accent-bright: #2f7fb5;
+  --accent-light: #9cc0da;
 
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --sans: 'Archivo', system-ui, -apple-system, sans-serif;
@@ -37,7 +37,7 @@
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: var(--paper); }
 html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
@@ -88,7 +88,7 @@ a { color: inherit; }
   font-family: var(--mono);
   font-size: 0.64rem;
   letter-spacing: 0.3em;
-  color: var(--accent);
+  color: var(--ink-soft);
   opacity: 0;
   transition: opacity 1.1s ease;
   white-space: nowrap;
@@ -126,7 +126,7 @@ a { color: inherit; }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(115% 85% at 50% 45%, transparent 45%, rgba(221,214,200,0.4) 100%);
+  background: radial-gradient(115% 85% at 50% 45%, transparent 45%, rgba(170,196,218,0.38) 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -153,7 +153,7 @@ a { color: inherit; }
   letter-spacing: -0.015em;
 }
 
-.stage-role { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; color: var(--accent); margin-top: 0.35rem; }
+.stage-role { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; color: var(--ink-soft); margin-top: 0.35rem; }
 .stage-meta { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; color: var(--muted); text-align: right; line-height: 1.9; }
 
 .node-layer { position: absolute; inset: 0; z-index: 3; }
@@ -177,7 +177,7 @@ a { color: inherit; }
 
 .node-btn.on { opacity: 1; }
 .node-btn:hover { color: var(--ink); }
-.node-btn .idx { font-size: 0.56rem; color: var(--accent-bright); }
+.node-btn .idx { font-size: 0.56rem; color: var(--muted); }
 .node-btn.right { transform: translate(0, -50%); }
 .node-btn.below { transform: translate(-50%, 0); }
 .node-btn.above { transform: translate(-50%, -100%); }
@@ -270,7 +270,7 @@ a { color: inherit; }
   font-family: var(--mono);
   font-size: 0.58rem;
   letter-spacing: 0.14em;
-  color: var(--accent);
+  color: var(--ink-soft);
   margin-top: 0.5rem;
   line-height: 1.8;
 }
@@ -304,8 +304,15 @@ a { color: inherit; }
 
 .contents a span:first-child { font-size: 0.56rem; color: var(--accent-light); transition: color 0.25s; }
 .contents a:hover { color: var(--ink); }
-.contents a.active { color: var(--accent); }
-.contents a.active span:first-child { color: var(--accent); }
+
+.contents a.active {
+  color: var(--ink);
+  font-weight: 500;
+  box-shadow: inset 2px 0 0 var(--accent);
+  padding-left: 0.6rem;
+}
+
+.contents a.active span:first-child { color: var(--ink); }
 
 .rail-foot { margin-top: auto; padding-top: 2rem; }
 
@@ -321,12 +328,12 @@ a { color: inherit; }
 }
 
 .rail-foot a:hover { color: var(--accent); }
-.rail-foot .cv { color: var(--accent); margin-top: 0.5rem; }
+.rail-foot .cv { color: var(--ink); font-weight: 500; margin-top: 0.5rem; }
 
 /* ================= CONTENT COLUMN ================= */
 .col { padding: 3.25rem 0 0; min-width: 0; }
 
-.block { padding: 2.75rem 0 3.5rem; scroll-margin-top: 1.5rem; }
+.block { padding: 2.75rem 0 3rem; scroll-margin-top: 1.5rem; }
 .block + .block { border-top: 1px solid var(--rule); }
 
 .block-mark {
@@ -396,10 +403,9 @@ a { color: inherit; }
 }
 
 .row:first-of-type { border-top: 1px solid var(--rule); }
-.row:last-of-type { border-bottom: 1px solid var(--rule); }
 
 .row-side { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; line-height: 1.85; }
-.row-side .where { color: var(--accent); display: block; }
+.row-side .where { color: var(--ink); font-weight: 500; display: block; }
 .row-side .when { color: var(--muted); display: block; margin-top: 0.3rem; }
 
 .row-side .flag {
@@ -408,7 +414,8 @@ a { color: inherit; }
   font-size: 0.54rem;
   letter-spacing: 0.12em;
   background: var(--accent);
-  color: #fff;
+  color: var(--paper);
+  font-weight: 500;
   padding: 0.18rem 0.45rem;
 }
 
@@ -442,7 +449,7 @@ a { color: inherit; }
   font-family: var(--mono);
   font-size: 0.56rem;
   letter-spacing: 0.1em;
-  color: var(--accent);
+  color: var(--muted);
   margin-top: 0.9rem;
 }
 
@@ -458,7 +465,7 @@ a { color: inherit; }
   gap: 2rem 2.5rem;
   margin-top: 2.5rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--paper-edge);
 }
 
 .lists.four { grid-template-columns: repeat(2, 1fr); margin-top: 0; padding-top: 0; border-top: 0; }
@@ -522,7 +529,7 @@ a { color: inherit; }
 .contact h2 em { font-style: italic; color: var(--accent); }
 .contact-note { color: var(--ink-soft); max-width: 46ch; font-size: 0.94rem; line-height: 1.8; margin-bottom: 2rem; }
 
-.contact-links { display: flex; flex-wrap: wrap; border-top: 1px solid var(--accent-light); }
+.contact-links { display: flex; flex-wrap: wrap; border-top: 1px solid var(--rule); }
 
 .contact-link {
   font-family: var(--mono);
@@ -531,7 +538,7 @@ a { color: inherit; }
   text-decoration: none;
   padding: 1.1rem 2.25rem 1.1rem 0;
   margin-right: 2.25rem;
-  border-bottom: 1px solid var(--accent-light);
+  border-bottom: 1px solid var(--paper-edge);
   position: relative;
   transition: color 0.25s;
 }
@@ -546,7 +553,7 @@ a { color: inherit; }
 }
 
 .contact-link:hover { color: var(--accent); }
-.contact-link:hover::after { width: calc(100% - 2.25rem); }
+.contact-link:hover::after { width: calc(100% - 2.25rem); height: 2px; }
 
 footer {
   border-top: 1px solid var(--rule);
@@ -678,21 +685,19 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
       <div class="block-mark">01 / About</div>
       <h2 class="block-title">A little but not so little about me</h2>
 
-      
       <div class="prose rv">
-
-    <p>Born and raised in Naharlagun,a small town nestled in the northeasternmost state of India,Arunachal Pradesh,where the sun makes its first appearance over the country,I grew up with rather limited exposure to computer science and technology in general.Mathematics, however, was an early fascination.It was only in high school that I first encountered Python and SQL,and the prospect of translating mathematical ideas into code gradually took hold. Computer Science seemed a rather natural choice for university, being,to my mind, one of the most direct ways of putting mathematics to work.
-    <p>I like working around problems concerning humans and solving them using AI.AI for humans, or humans for AI? Both ways, actually.I'm interested in human-centred intelligent systems particularly in social and cultural contexts.Currently I’m working on an audio-based lexical retrieval system for Apatani,an indigenous dialect of Arunachal Pradesh. The project focuses on using speech representations and contextual information to retrieve words and expressions from complete, partial, or ambiguous speech, without relying on standardised romanised input since the dialect doesn’t have a agreed upon script.I have also been exploring the use of deep generative models to document, classify, and generate traditional handloom motifs of indigenous communities in Arunachal Pradesh. The broader idea is to investigate how computer vision and generative modelling might contribute to documenting and reinterpreting indigenous visual traditions. Although the project began some time ago, it remains in its innate stage, largely because assembling a sufficiently extensive and well-documented dataset has proved more challenging than initially anticipated. Much of our current effort is therefore directed towards collecting additional samples and documenting the motifs, while ensuring that the cultural context and narratives associated with them are not lost in the process.
-    <p>Of late, I've also worked around representation learning, more specifically on model aggregation,alignment, and fusion. My recent research investigates the application of Optimal Transport theory to fusing independently trained Transformers with heterogeneous depths.The central idea is to establish structural and parameter-level correspondences between networks across different scales, using Fused Gromov–Wasserstein transport, Bures–Wasserstein geometry, and entropic Sinkhorn transport. An interesting aspect of this work has been examining the assumptions underlying network alignment and understanding how different alignment strategies influence the eventual fusion of neural representations. The project originated during my research internship at National Chung Cheng University (CCU), Taiwan, under the Taiwan Experience Education Program (TEEP) in the summer of 2026.We are hopeful to publish our work early next year.
-    <p>Apart from all this, I find joy in cooking, making kimchi during gimjang and hosting lunches for people.I also write occasionally, and some of my ramblings find their way onto Medium.Although I loved reading through my teenage years, that habit has transcended more into writing now : mostly random thoughts mixed with nostalgic fragments that occur to me at times.
-    <p>Outside all this, I'm always up for a conversation about post-war history, the origin stories behind our food , and aviation, preferably over a cup of Oolong tea.
-    <a class="inline-link" href="https://medium.com/@biswadeepch11/hiraeth-a-home-in-arunachal-1426e289ca23" target="_blank" rel="noopener">Read on Medium: Hiraeth, A Home in Arunachal ↗</a>
+        <p>Born and raised in Naharlagun,a small town nestled in the northeasternmost state of India,Arunachal Pradesh,where the sun makes its first appearance over the country,I grew up with rather limited exposure to computer science and technology in general.Mathematics, however, was an early fascination.It was only in high school that I first encountered Python and SQL,and the prospect of translating mathematical ideas into code gradually took hold. Computer Science seemed a rather natural choice for university, being,to my mind, one of the most direct ways of putting mathematics to work.</p>
+        <p>I like working around problems concerning humans and solving them using AI.AI for humans, or humans for AI? Both ways, actually.I'm interested in human-centred intelligent systems particularly in social and cultural contexts.Currently I’m working on an audio-based lexical retrieval system for Apatani,an indigenous dialect of Arunachal Pradesh. The project focuses on using speech representations and contextual information to retrieve words and expressions from complete, partial, or ambiguous speech, without relying on standardised romanised input since the dialect doesn’t have a agreed upon script.I have also been exploring the use of deep generative models to document, classify, and generate traditional handloom motifs of indigenous communities in Arunachal Pradesh. The broader idea is to investigate how computer vision and generative modelling might contribute to documenting and reinterpreting indigenous visual traditions. Although the project began some time ago, it remains in its innate stage, largely because assembling a sufficiently extensive and well-documented dataset has proved more challenging than initially anticipated. Much of our current effort is therefore directed towards collecting additional samples and documenting the motifs, while ensuring that the cultural context and narratives associated with them are not lost in the process.</p>
+        <p>Of late, I've also worked around representation learning, more specifically on model aggregation,alignment, and fusion. My recent research investigates the application of Optimal Transport theory to fusing independently trained Transformers with heterogeneous depths.The central idea is to establish structural and parameter-level correspondences between networks across different scales, using Fused Gromov–Wasserstein transport, Bures–Wasserstein geometry, and entropic Sinkhorn transport. An interesting aspect of this work has been examining the assumptions underlying network alignment and understanding how different alignment strategies influence the eventual fusion of neural representations. The project originated during my research internship at National Chung Cheng University (CCU), Taiwan, under the Taiwan Experience Education Program (TEEP) in the summer of 2026.We are hopeful to publish our work early next year.</p>
+        <p>Apart from all this, I find joy in cooking, making kimchi during gimjang and hosting lunches for people.I also write occasionally, and some of my ramblings find their way onto Medium.Although I loved reading through my teenage years, that habit has transcended more into writing now : mostly random thoughts mixed with nostalgic fragments that occur to me at times.</p>
+        <p>Outside all this, I'm always up for a conversation about post-war history, the origin stories behind our food , and aviation, preferably over a cup of Oolong tea.</p>
+        <a class="inline-link" href="https://medium.com/@biswadeepch11/hiraeth-a-home-in-arunachal-1426e289ca23" target="_blank" rel="noopener">Read on Medium: Hiraeth, A Home in Arunachal ↗</a>
       </div>
 
       <div class="lists rv">
         <div>
           <div class="list-title">Interests</div>
-          <ul class="list"><li>Human-Centred AI</li></ul>
+          <ul class="list"><li>Human-Centred AI</li><li>Representation Learning</li><li>Federated Learning</li></ul>
         </div>
         <div>
           <div class="list-title">Currently exploring</div>
@@ -743,7 +748,7 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
         </div>
         <div class="row-main">
           <h3>Drone surveillance &amp; trajectory prediction</h3>
-          <p>Under Dr Dinesh Singh, I worked on two problems at the intersection of optimisation and machine learning. First: scheduling drone patrols to minimise flight time under patrol-interval constraints — ILP, Greedy, Simulated Annealing and a novel multi-stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal) for high coverage at reduced runtime. Second: the Trajectron model for multi-agent trajectory prediction using CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY with competitive ADE/FDE/NLL and outperforming baselines such as SGAN.</p>
+          <p>Under Dr Dinesh Singh, I worked on two problems concerning drone operations. First: scheduling drone patrols to minimise flight time under patrol-interval constraints — ILP, Greedy, Simulated Annealing and a novel multi-stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal) for high coverage at reduced runtime. Second: the Trajectron model for multi-agent trajectory prediction using CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY with competitive ADE/FDE/NLL and outperforming baselines such as SGAN.</p>
           <div class="tags">
             <span class="tag">PyTorch</span>
             <span class="tag">ILP</span>
@@ -779,19 +784,6 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
 
       <article class="row rv">
         <div class="row-side">
-          <span class="where">Independent</span>
-          <span class="when">Jun 2025 –</span>
-          <span class="flag">Ongoing</span>
-        </div>
-        <div class="row-main">
-          <h3>Deep generative systems for indigenous textile archiving</h3>
-          <p>Applying deep learning to digitise, classify and re-envision the indigenous handloom motifs of Arunachal Pradesh. CNN/GAN pipelines for regional motif classification and generative synthesis, a searchable dataset integrating visual data, metadata and cultural narratives, and a prototype AI-assisted pattern-design toolkit using neural style transfer.</p>
-          <div class="row-meta">CNN · GAN · Style Transfer</div>
-        </div>
-      </article>
-
-      <article class="row rv">
-        <div class="row-side">
           <span class="where">CCU Taiwan</span>
           <span class="when">Jun 2026 – Oct 2026</span>
         </div>
@@ -805,8 +797,7 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
       <article class="row rv">
         <div class="row-side">
           <span class="where">IISER Bhopal</span>
-          <span class="when">Aug 2026 –</span>
-          <span class="flag">Ongoing</span>
+          <span class="when">Aug 2026 – Nov 2026</span>
         </div>
         <div class="row-main">
           <h3>Federated learning for heterogeneous Indian judicial data</h3>
@@ -837,6 +828,19 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
           <h3>Geospatial LLM inference for travel</h3>
           <p>The data backbone for an LLM-powered travel decision system: scraping flight data, curating geospatial datasets for Indian destinations, integrating APIs. The kind of infrastructure work that makes “AI-powered” tools actually function.</p>
           <div class="row-meta">LLMs · Data Engineering · Geospatial</div>
+        </div>
+      </article>
+
+      <article class="row rv">
+        <div class="row-side">
+          <span class="where">Independent</span>
+          <span class="when">Jun 2025 –</span>
+          <span class="flag">Ongoing</span>
+        </div>
+        <div class="row-main">
+          <h3>Deep generative systems for indigenous textile archiving</h3>
+          <p>Applying deep learning to digitise, classify and re-envision the indigenous handloom motifs of Arunachal Pradesh. CNN/GAN pipelines for regional motif classification and generative synthesis, a searchable dataset integrating visual data, metadata and cultural narratives, and a prototype AI-assisted pattern-design toolkit using neural style transfer.</p>
+          <div class="row-meta">CNN · GAN · Style Transfer</div>
         </div>
       </article>
 
@@ -998,7 +1002,7 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
     <!-- ===== CONTACT ===== -->
     <section class="block contact" id="contact">
       <div class="block-mark">08 / Contact</div>
-      <h2 class="rv">I'm always up for a <em>good conversation</em>.</h2>
+      <h2 class="rv">I'm always up for a good conversation.</h2>
       <p class="contact-note rv">Whether it's about research collaboration, a project idea, or just a recipe recommendation;I'd love to hear from you.</p>
       <div class="contact-links rv">
         <a href="mailto:biswadeep23@iiserb.ac.in" class="contact-link">biswadeep23@iiserb.ac.in</a>
@@ -1087,24 +1091,29 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
     var cx = OW / 2, cy = OH * 0.44;
     var i, j, k;
 
-    var A = [[0, -1], [1, 0], [0, 1], [-1, 0],
-             [0, -0.42], [0.42, 0], [0, 0.42], [-0.42, 0],
-             [-1.72, -0.56], [-1.72, 0.56], [1.72, -0.56], [1.72, 0.56],
-             [-2.45, 0], [2.45, 0]];
-    FA = A.map(function (p) { return { x: cx + p[0] * s, y: cy + p[1] * s }; });
-    EA = [[0, 1], [1, 2], [2, 3], [3, 0],
-          [4, 5], [5, 6], [6, 7], [7, 4],
-          [0, 4], [1, 5], [2, 6], [3, 7],
-          [8, 3], [9, 3], [10, 1], [11, 1],
-          [12, 8], [12, 9], [13, 10], [13, 11]];
+    // a snowflake: hub, six inner nodes, six tips, six side branches
+    var A = [[0, 0]], arm = Math.PI / 3, th;
+    for (i = 0; i < 6; i++) { th = i * arm - Math.PI / 2; A.push([Math.cos(th) * 0.46, Math.sin(th) * 0.46]); }
+    for (i = 0; i < 6; i++) { th = i * arm - Math.PI / 2; A.push([Math.cos(th) * 1.35, Math.sin(th) * 1.35]); }
+    for (i = 0; i < 6; i++) {
+      th = i * arm - Math.PI / 2 + (i % 2 ? 0.55 : -0.55);
+      A.push([Math.cos(th) * 1.02, Math.sin(th) * 1.02]);
+    }
+    FA = A.map(function (p) { return { x: cx + p[0] * s * 1.45, y: cy + p[1] * s * 1.45 }; });
 
-    var cols = [-1.95, -0.65, 0.65, 1.95], counts = [3, 4, 4, 3];
+    EA = [];
+    for (i = 0; i < 6; i++) EA.push([0, 1 + i]);
+    for (i = 0; i < 6; i++) EA.push([1 + i, 7 + i]);
+    for (i = 0; i < 6; i++) EA.push([1 + i, 1 + (i + 1) % 6]);
+    for (i = 0; i < 6; i++) EA.push([7 + i, 13 + i]);
+
+    var cols = [-1.95, -0.65, 0.65, 1.95], counts = [4, 5, 5, 5];
     FB = []; EB = [];
     var layers = [], idx = 0;
     for (i = 0; i < cols.length; i++) {
       var lay = [];
       for (j = 0; j < counts[i]; j++) {
-        FB.push({ x: cx + cols[i] * s, y: cy + (j - (counts[i] - 1) / 2) * s * 0.62 });
+        FB.push({ x: cx + cols[i] * s, y: cy + (j - (counts[i] - 1) / 2) * s * 0.5 });
         lay.push(idx++);
       }
       layers.push(lay);
@@ -1123,7 +1132,7 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
         x: Math.random() * OW,
         y: Math.random() * OH,
         r: 0.5 + Math.random() * 1.1,
-        a: 0.1 + Math.random() * 0.3,
+        a: 0.12 + Math.random() * 0.3,
         ph: Math.random() * 6.2832,
         sp: 0.4 + Math.random() * 0.8
       });
@@ -1133,11 +1142,11 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
   function star(x, y, r, alpha) {
     if (alpha <= 0.002) return;
     var g = octx.createRadialGradient(x, y, 0, x, y, r * 5);
-    g.addColorStop(0, 'rgba(93,64,120,' + (alpha * 0.3).toFixed(3) + ')');
-    g.addColorStop(1, 'rgba(93,64,120,0)');
+    g.addColorStop(0, 'rgba(47,127,181,' + (alpha * 0.38).toFixed(3) + ')');
+    g.addColorStop(1, 'rgba(47,127,181,0)');
     octx.fillStyle = g;
     octx.beginPath(); octx.arc(x, y, r * 5, 0, 6.2832); octx.fill();
-    octx.fillStyle = 'rgba(26,24,19,' + alpha.toFixed(3) + ')';
+    octx.fillStyle = 'rgba(15,32,48,' + alpha.toFixed(3) + ')';
     octx.beginPath(); octx.arc(x, y, r, 0, 6.2832); octx.fill();
   }
 
@@ -1153,14 +1162,14 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
 
     if (t > 0.35) otRead.classList.add('on');
     if (t > T_MOVE) rdPhase.textContent = 'an architecture';
-    else if (t > T_FIELD) rdPhase.textContent = 'an asterism';
+    else if (t > T_FIELD) rdPhase.textContent = 'a snowflake';
     if (t > T_LAND + 0.1) otSub.classList.add('on');
     if (exit > 0) otRead.classList.remove('on');
 
     for (i = 0; i < field.length; i++) {
       var f = field[i];
       var tw = 0.75 + 0.25 * Math.sin(t * f.sp + f.ph);
-      octx.fillStyle = 'rgba(26,24,19,' + (f.a * tw * fade * out).toFixed(3) + ')';
+      octx.fillStyle = 'rgba(74,104,130,' + (f.a * tw * fade * out).toFixed(3) + ')';
       octx.beginPath(); octx.arc(f.x, f.y, f.r, 0, 6.2832); octx.fill();
     }
 
@@ -1176,10 +1185,10 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
     }
 
     var la = clamp01((t - T_FIELD) / (T_LINES - T_FIELD));
-    var alphaA = 0.42 * (1 - move) * out;
+    var alphaA = 0.48 * (1 - move) * out;
     if (la > 0 && alphaA > 0.002) {
       octx.lineWidth = 1;
-      octx.strokeStyle = 'rgba(93,64,120,' + alphaA.toFixed(3) + ')';
+      octx.strokeStyle = 'rgba(47,127,181,' + alphaA.toFixed(3) + ')';
       for (i = 0; i < EA.length; i++) {
         e = EA[i];
         var dl = (i / EA.length) * 0.55;
@@ -1196,7 +1205,7 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
     var lb = clamp01((t - (T_MOVE + 0.8)) / 1.0);
     if (lb > 0) {
       octx.lineWidth = 0.8;
-      octx.strokeStyle = 'rgba(93,64,120,' + (0.18 * lb * out).toFixed(3) + ')';
+      octx.strokeStyle = 'rgba(47,127,181,' + (0.3 * lb * out).toFixed(3) + ')';
       octx.beginPath();
       for (i = 0; i < EB.length; i++) {
         e = EB[i];
@@ -1209,7 +1218,8 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
 
     for (i = 0; i < pos.length; i++) {
       var app = easeIO(clamp01((t - 0.2 - (i % 5) * 0.07) / 0.8));
-      star(pos[i].x, pos[i].y, 2.2 + (i < 4 ? 0.7 : 0), 0.9 * app * fade * out);
+      var big = (i === 0 || (i >= 7 && i <= 12));
+      star(pos[i].x, pos[i].y, big ? 2.9 : 2.1, 0.92 * app * fade * out);
     }
 
     if (t >= T_OUT && !finished) { endOverture(); return; }
@@ -1262,6 +1272,7 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
   var cvHover = false, cvBtn = null;
   var CVN = 2;
   var mouse = { x: 0, y: 0, on: false };
+  var snow = [], snowT = 0;
   var HID = 4, OUT0 = 1 + HID;
 
   function build() {
@@ -1297,6 +1308,20 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
     }
 
     if (nodes[CVN]) { nodes[CVN].cv = true; nodes[CVN].r = 6.5; }
+
+    snow = [];
+    var flakes = vertical ? 45 : 85;
+    for (i = 0; i < flakes; i++) {
+      snow.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 0.6 + Math.random() * 1.7,
+        fall: 7 + Math.random() * 22,
+        sway: 4 + Math.random() * 14,
+        ph: Math.random() * 6.2832,
+        a: 0.2 + Math.random() * 0.5
+      });
+    }
 
     placeButtons();
   }
@@ -1415,6 +1440,20 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
     var t = (now - start) / 1000;
     ctx.clearRect(0, 0, W, H);
 
+    // snowfall, behind everything
+    if (!REDUCED) {
+      var dt = Math.min(0.05, Math.max(0, t - snowT));
+      snowT = t;
+      for (var si = 0; si < snow.length; si++) {
+        var fl = snow[si];
+        fl.y += fl.fall * dt;
+        if (fl.y - fl.r > H) { fl.y = -fl.r; fl.x = Math.random() * W; }
+        var fx = fl.x + Math.sin(t * 0.45 + fl.ph) * fl.sway;
+        ctx.fillStyle = 'rgba(150,185,215,' + (fl.a * 0.85).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(fx, fl.y, fl.r, 0, 6.2832); ctx.fill();
+      }
+    }
+
     nodes.forEach(function (n) {
       var x = n.bx, y = n.by;
       if (!REDUCED) {
@@ -1440,9 +1479,9 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
       if (p <= 0.01) return;
       var lit = (hover >= 0 && (e.a === 0 || e.b === OUT0 + hover)) ||
                 (cvHover && (e.a === CVN || e.b === CVN));
-      var alpha = (lit ? 0.5 : 0.16) * e.w * p;
-      ctx.strokeStyle = lit ? 'rgba(93,64,120,' + alpha + ')' : 'rgba(110,100,90,' + alpha + ')';
-      ctx.lineWidth = lit ? 1.1 : 0.7;
+      var alpha = (lit ? 0.8 : 0.26) * e.w * p;
+      ctx.strokeStyle = lit ? 'rgba(31,92,140,' + alpha + ')' : 'rgba(156,176,196,' + alpha + ')';
+      ctx.lineWidth = lit ? 1.5 : 0.7;
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(lerp(a.x, b.x, p), lerp(a.y, b.y, p));
@@ -1458,12 +1497,12 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
       var px = lerp(na.x, nb.x, pl.p), py = lerp(na.y, nb.y, pl.p);
       var tx = lerp(na.x, nb.x, Math.max(0, pl.p - 0.09)), ty = lerp(na.y, nb.y, Math.max(0, pl.p - 0.09));
       var g = ctx.createLinearGradient(tx, ty, px, py);
-      g.addColorStop(0, 'rgba(127,91,164,0)');
-      g.addColorStop(1, 'rgba(93,64,120,0.8)');
+      g.addColorStop(0, 'rgba(31,92,140,0)');
+      g.addColorStop(1, 'rgba(20,70,110,0.9)');
       ctx.strokeStyle = g;
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(px, py); ctx.stroke();
-      ctx.fillStyle = 'rgba(93,64,120,0.9)';
+      ctx.fillStyle = 'rgba(16,60,95,0.95)';
       ctx.beginPath(); ctx.arc(px, py, 1.7, 0, 6.2832); ctx.fill();
     }
 
@@ -1473,25 +1512,25 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
       var r = n.r * (0.6 + 0.4 * n.app) * (isHover ? 1.4 : 1) * (1 + n.glow * 0.5);
       var halo = r * (4.2 + n.glow * 3);
       var gr = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, halo);
-      var strength = (isHover ? 0.22 : 0.1) * n.app + n.glow * 0.2;
-      gr.addColorStop(0, 'rgba(127,91,164,' + strength + ')');
-      gr.addColorStop(1, 'rgba(127,91,164,0)');
+      var strength = (isHover ? 0.34 : 0.16) * n.app + n.glow * 0.3;
+      gr.addColorStop(0, 'rgba(47,127,181,' + strength + ')');
+      gr.addColorStop(1, 'rgba(47,127,181,0)');
       ctx.fillStyle = gr;
       ctx.beginPath(); ctx.arc(n.x, n.y, halo, 0, 6.2832); ctx.fill();
 
       ctx.fillStyle = (n.kind === 'hid' && !n.cv)
-        ? 'rgba(130,124,111,' + (0.65 * n.app) + ')'
-        : 'rgba(26,24,19,' + (0.9 * n.app) + ')';
+        ? 'rgba(146,168,190,' + (0.75 * n.app) + ')'
+        : 'rgba(15,32,48,' + (0.95 * n.app) + ')';
       ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 6.2832); ctx.fill();
 
       if (n.cv) {
-        ctx.strokeStyle = 'rgba(93,64,120,' + (0.5 * n.app) + ')';
+        ctx.strokeStyle = 'rgba(47,127,181,' + (0.65 * n.app) + ')';
         ctx.lineWidth = 1;
         ctx.beginPath(); ctx.arc(n.x, n.y, r + 7 + Math.sin(t * 1.8) * 1.8, 0, 6.2832); ctx.stroke();
       }
 
       if (n.kind === 'in') {
-        ctx.strokeStyle = 'rgba(93,64,120,' + (0.4 * n.app) + ')';
+        ctx.strokeStyle = 'rgba(47,127,181,' + (0.55 * n.app) + ')';
         ctx.lineWidth = 1;
         ctx.beginPath(); ctx.arc(n.x, n.y, r + 9 + Math.sin(t * 1.4) * 2.5, 0, 6.2832); ctx.stroke();
       }
