@@ -16,6 +16,7 @@
   --paper-deep: #101011;
   --card: #141416;
   --paper-edge: #262628;
+  --rule: #2f2f32;
 
   --ink: #f2f1ee;
   --ink-soft: #c0beb9;
@@ -29,8 +30,9 @@
   --sans: 'Schibsted Grotesk', system-ui, -apple-system, sans-serif;
   --mono: 'Spline Sans Mono', ui-monospace, 'SF Mono', monospace;
 
-  --col: 760px;
-  --pad: 1.75rem;
+  --col: 1020px;
+  --gutter: 150px;
+  --pad: 2rem;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +43,7 @@ body {
   font-family: var(--sans);
   background: var(--paper);
   color: var(--ink);
-  line-height: 1.75;
+  line-height: 1.7;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -87,263 +89,252 @@ a { color: inherit; }
 
 .ot-skip:hover { color: var(--ink); }
 
-/* ================= MENU ================= */
-.menu {
+/* ================= TOP BAR ================= */
+.bar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10,10,11,0.9);
+  background: rgba(10,10,11,0.88);
   backdrop-filter: blur(14px);
 }
 
-.menu-in {
+.bar-in {
   max-width: var(--col);
   margin: 0 auto;
-  padding: 1.1rem var(--pad) 1rem;
+  padding: 1rem var(--pad);
   display: flex;
-  align-items: baseline;
-  gap: 1.4rem;
+  gap: 1.1rem;
   flex-wrap: wrap;
+  align-items: baseline;
 }
 
-.menu-label {
+.bar a {
   font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--accent-dim);
-  margin-right: 0.3rem;
-}
-
-.menu a {
-  font-family: var(--sans);
-  font-size: 0.88rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
   color: var(--muted);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.menu a:hover { color: var(--ink); }
-.menu a.active { color: var(--accent-bright); }
+.bar a:hover { color: var(--ink); }
+.bar a.active { color: var(--accent-bright); }
+.bar .home { color: var(--ink); margin-right: auto; font-family: var(--serif); font-size: 0.86rem; letter-spacing: 0; }
 
-/* ================= COLUMN ================= */
+/* ================= PAGE COLUMN ================= */
 .page {
   max-width: var(--col);
   margin: 0 auto;
-  padding: 3rem var(--pad) 0;
+  padding: 3.5rem var(--pad) 0;
 }
 
-.portrait {
-  width: 168px;
-  height: 168px;
+/* a section is a label in the gutter and content beside it */
+.sec {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  column-gap: 2.75rem;
+}
+
+.sec > h2 { grid-column: 1; }
+.sec > *:not(h2) { grid-column: 2; }
+
+/* intro */
+.intro {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  column-gap: 2.75rem;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.links-row {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  column-gap: 2.75rem;
+  margin-bottom: 3.5rem;
+}
+
+.links-row .links { grid-column: 2; margin-bottom: 0; }
+
+.avatar {
+  width: 128px; height: 128px;
+  justify-self: end;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
+  flex: 0 0 auto;
   background: var(--card);
   box-shadow: 0 0 0 1px var(--paper-edge);
-  margin-bottom: 2rem;
 }
 
-.portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.portrait span {
+.avatar span {
   display: none;
   position: absolute; inset: 0;
   align-items: center; justify-content: center;
   font-family: var(--mono);
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   letter-spacing: 0.1em;
   color: var(--muted);
 }
 
-.portrait.empty span { display: flex; }
+.avatar.empty span { display: flex; }
 
-h1 {
+.intro h1 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(2.1rem, 6vw, 3rem);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.35rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.5rem;
 }
 
-.rule-glyph { color: var(--accent); font-size: 1.6rem; line-height: 1; margin-bottom: 1.5rem; }
+.intro .who { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.12em; color: var(--muted); line-height: 1.9; }
 
-.bio p { font-size: 1.02rem; color: var(--ink-soft); line-height: 1.85; margin-bottom: 1.15rem; }
-.bio p:last-child { margin-bottom: 0; }
+.links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin-bottom: 3.25rem; }
 
-a.link {
+.links a {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid var(--accent-dim);
-  transition: color 0.2s, border-color 0.2s;
+  transition: color 0.2s;
 }
 
-a.link:hover { color: var(--accent-bright); border-color: var(--accent); }
+.links a:hover { color: var(--accent-bright); }
+.links a::before { content: '['; color: var(--accent-dim); margin-right: 0.15rem; }
+.links a::after { content: ']'; color: var(--accent-dim); margin-left: 0.15rem; }
 
-/* section headings */
-h2 {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: 1.5rem;
-  letter-spacing: -0.015em;
-  margin-bottom: 1.25rem;
+/* sections */
+.sec { padding-bottom: 3.75rem; scroll-margin-top: 4rem; }
+
+.sec > h2 {
+  position: sticky;
+  top: 4.5rem;
+  align-self: start;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.64rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
 }
 
-section { padding: 3.25rem 0 0; scroll-margin-top: 4.5rem; }
-
-section.bloom > h2 { animation: bloomIn 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+.sec.bloom > h2 { animation: bloomIn 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
 
 @keyframes bloomIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
 
-/* plain bulleted lists */
-ul.plain { list-style: none; }
+.prose { max-width: 74ch; }
+.prose p { font-size: 1rem; color: var(--ink-soft); line-height: 1.85; margin-bottom: 1.15rem; }
+.prose p:last-of-type { margin-bottom: 0; }
 
-ul.plain li {
-  position: relative;
-  padding-left: 1.2rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.96rem;
-  color: var(--ink-soft);
+.prose p:first-of-type::first-letter {
+  font-family: var(--serif);
+  font-size: 3rem;
+  float: left;
+  line-height: 0.86;
+  margin: 0.26rem 0.5rem 0 0;
+  color: var(--accent);
 }
 
-ul.plain li::before {
-  content: '·';
-  position: absolute;
-  left: 0.2rem;
-  color: var(--accent-dim);
-}
-
-ul.news li { margin-bottom: 0.75rem; }
-
-ul.news .when {
+.inline {
   font-family: var(--mono);
-  font-size: 0.78rem;
-  color: var(--muted);
-  margin-right: 0.35rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-dim);
+  padding-bottom: 0.15rem;
 }
 
-/* numbered entries with labelled fields */
-ol.entries { list-style: none; counter-reset: e; }
+.inline:hover { color: var(--accent-bright); border-color: var(--accent); }
 
-ol.entries > li {
-  counter-increment: e;
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  gap: 0 1rem;
-  margin-bottom: 2.25rem;
-}
+/* entries */
+.entry { margin-bottom: 2.5rem; }
+.entry:last-child { margin-bottom: 0; }
 
-ol.entries > li::before {
-  content: counter(e) '.';
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--accent-dim);
-  padding-top: 0.2rem;
-}
-
-.fields { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.15rem 1rem; }
-
-.fields dt {
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  color: var(--accent-dim);
-  padding-top: 0.22rem;
-}
-
-.fields dd { font-size: 0.95rem; color: var(--ink-soft); }
-.fields dd strong { font-weight: 500; color: var(--ink); }
-
-/* publication-style stack */
-.work { margin-bottom: 2.5rem; }
-
-.work h3 {
+.entry h3 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: 1.16rem;
+  font-size: 1.12rem;
   line-height: 1.4;
   letter-spacing: -0.01em;
   margin-bottom: 0.4rem;
 }
 
-.work .byline { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.2rem; }
-.work .byline b { font-weight: 600; color: var(--ink); }
-.work .venue { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); margin-bottom: 0.6rem; }
-.work p { font-size: 0.94rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 0.6rem; }
-
-.bracketed { display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; }
-
-.bracketed a, .bracketed span {
+.entry .meta {
   font-family: var(--mono);
-  font-size: 0.74rem;
-  color: var(--accent);
-  text-decoration: none;
-  transition: color 0.2s;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.7rem;
 }
 
-.bracketed span { color: var(--accent-dim); }
-.bracketed a:hover { color: var(--accent-bright); }
-.bracketed a::before, .bracketed span::before { content: '['; color: var(--accent-dim); }
-.bracketed a::after, .bracketed span::after { content: ']'; color: var(--accent-dim); }
+.entry .meta .now { color: var(--paper); background: var(--accent); padding: 0.1rem 0.4rem; margin-left: 0.5rem; font-size: 0.55rem; letter-spacing: 0.1em; }
 
-/* numbered award/talk lists */
-ol.records { list-style: none; counter-reset: r; }
+.entry p { font-size: 0.93rem; color: var(--ink-soft); line-height: 1.8; max-width: 76ch; }
+.entry p + p { margin-top: 0.7rem; }
 
-ol.records > li {
-  counter-increment: r;
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  gap: 0 1rem;
-  margin-bottom: 1.4rem;
-}
+.tags { display: flex; flex-wrap: wrap; gap: 0.3rem 0.75rem; margin-top: 0.75rem; }
 
-ol.records > li::before {
-  content: counter(r) '.';
+.tags span {
   font-family: var(--mono);
-  font-size: 0.8rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
   color: var(--accent-dim);
-  padding-top: 0.15rem;
 }
 
-ol.records .yr { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); display: block; }
-ol.records strong { font-weight: 500; font-size: 1rem; display: block; }
-ol.records span.org { font-size: 0.9rem; color: var(--muted); }
+.tags span::before { content: '· '; }
+.tags span:first-child::before { content: ''; }
 
-/* key/value */
-.kv { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 0.5rem 1.25rem; }
+/* compact year lines */
+.line { display: flex; gap: 1.25rem; padding: 0.7rem 0; align-items: baseline; }
+
+.line .yr {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  flex: 0 0 7.5rem;
+}
+
+.line .what strong { font-weight: 500; display: block; font-size: 0.96rem; }
+.line .what span { font-size: 0.86rem; color: var(--muted); }
+
+/* key-value lists */
+.kv { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 0.6rem 1.5rem; max-width: 760px; }
 
 .kv dt {
   font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--accent-dim);
   padding-top: 0.2rem;
 }
 
-.kv dd { font-size: 0.95rem; color: var(--ink-soft); }
+.kv dd { font-size: 0.92rem; color: var(--ink-soft); }
 
-/* footer */
+/* contact */
+.sec.contact p { font-size: 1rem; color: var(--ink-soft); max-width: 48ch; margin-bottom: 1.5rem; }
+
 footer {
   max-width: var(--col);
   margin: 0 auto;
-  padding: 4rem var(--pad) 3rem;
+  padding: 2.5rem var(--pad) 3rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.foot-nav { display: flex; gap: 1.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
-
-.foot-nav a {
-  font-size: 0.88rem;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.foot-nav a:hover { color: var(--ink); }
-footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim); }
+footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-dim); letter-spacing: 0.08em; }
 
 /* reveal */
 .rv { opacity: 0; transform: translateY(14px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
@@ -352,16 +343,27 @@ footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim)
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rv { transition: none; opacity: 1; transform: none; }
-  section.bloom > h2 { animation: none; }
+  .hint::after { animation: none; }
+  .sec.bloom > h2 { animation: none; }
+}
+
+@media (max-width: 860px) {
+  :root { --pad: 1.4rem; }
+  .sec, .intro, .links-row { grid-template-columns: 1fr; column-gap: 0; }
+  .sec > *:not(h2), .links-row .links { grid-column: 1; }
+  .sec > h2 { position: static; margin-bottom: 1.1rem; }
+  .intro { grid-template-columns: auto 1fr; column-gap: 1.2rem; }
 }
 
 @media (max-width: 620px) {
-  :root { --pad: 1.25rem; }
-  .portrait { width: 124px; height: 124px; }
-  .fields, .kv { grid-template-columns: 1fr; gap: 0.1rem; }
-  .fields dd, .kv dd { margin-bottom: 0.5rem; }
-  ol.entries > li, ol.records > li { grid-template-columns: 1.5rem minmax(0, 1fr); gap: 0 0.6rem; }
-  .menu-in { gap: 1rem; }
+  :root { --pad: 1.2rem; }
+  .page { padding-top: 2rem; }
+  .avatar { width: 84px; height: 84px; justify-self: start; }
+  .line { flex-direction: column; gap: 0.2rem; }
+  .line .yr { flex: none; }
+  .kv { grid-template-columns: 1fr; gap: 0.2rem; }
+  .kv dd { margin-bottom: 0.6rem; }
+  .bar .home { display: none; }
 }
 </style>
 </head>
@@ -374,188 +376,146 @@ footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim)
   <button class="ot-skip" id="otSkip" type="button">skip</button>
 </div>
 
-<!-- ================= MENU ================= -->
-<nav class="menu">
-  <div class="menu-in">
-    <span class="menu-label">Menu</span>
-    <a href="#top" data-id="top">About</a>
-    <a href="#news" data-id="news">What's new</a>
-    <a href="#experience" data-id="experience">Experience</a>
-    <a href="#work" data-id="work">Work</a>
-    <a href="#record" data-id="record">Record</a>
+<!-- ================= TOP BAR ================= -->
+<nav class="bar" id="bar">
+  <div class="bar-in">
+    <a href="#top" class="home">CB</a>
+    <a href="#about" data-id="about">About</a>
+    <a href="#research" data-id="research">Research</a>
+    <a href="#projects" data-id="projects">Projects</a>
+    <a href="#toolkit" data-id="toolkit">Toolkit</a>
+    <a href="#beyond" data-id="beyond">Beyond</a>
+    <a href="#awards" data-id="awards">Awards</a>
+    <a href="#education" data-id="education">Education</a>
+    <a href="#contact" data-id="contact">Contact</a>
   </div>
 </nav>
 
 <main class="page" id="top">
 
-  <div class="portrait rv" id="portrait">
-    <img src="me.jpg" alt="Chakraborty Biswadeep"
-         onerror="this.remove(); document.getElementById('portrait').classList.add('empty');">
-    <span aria-hidden="true">CB</span>
-  </div>
-
-  <h1 class="rv">Chakraborty Biswadeep</h1>
-  <div class="rule-glyph rv" aria-hidden="true">▎</div>
-
-  <div class="bio rv">
-    <p>I am an undergraduate in Computer Science and Engineering at <a class="link" href="https://www.iiserb.ac.in/" target="_blank" rel="noopener">IISER Bhopal</a>, working on human-centred AI and representation learning. Most recently I was a research intern at <a class="link" href="https://www.ccu.edu.tw/" target="_blank" rel="noopener">National Chung Cheng University</a>, Taiwan, under the Taiwan Experience Education Program.</p>
-    <p>Born and raised in Naharlagun,a small town nestled in the northeasternmost state of India,Arunachal Pradesh,where the sun makes its first appearance over the country,I grew up with rather limited exposure to computer science and technology in general.Mathematics, however, was an early fascination.It was only in high school that I first encountered Python and SQL,and the prospect of translating mathematical ideas into code gradually took hold. Computer Science seemed a rather natural choice for university, being,to my mind, one of the most direct ways of putting mathematics to work.</p>
-    <p>I like working around problems concerning humans and solving them using AI.AI for humans, or humans for AI? Both ways, actually.I'm interested in human-centred intelligent systems particularly in social and cultural contexts.Currently I'm working on an audio-based lexical retrieval system for Apatani,an indigenous dialect of Arunachal Pradesh. The project focuses on using speech representations and contextual information to retrieve words and expressions from complete, partial, or ambiguous speech, without relying on standardised romanised input since the dialect doesn't have a agreed upon script.I have also been exploring the use of deep generative models to document, classify, and generate traditional handloom motifs of indigenous communities in Arunachal Pradesh. The broader idea is to investigate how computer vision and generative modelling might contribute to documenting and reinterpreting indigenous visual traditions. Although the project began some time ago, it remains in its innate stage, largely because assembling a sufficiently extensive and well-documented dataset has proved more challenging than initially anticipated. Much of our current effort is therefore directed towards collecting additional samples and documenting the motifs, while ensuring that the cultural context and narratives associated with them are not lost in the process.</p>
-    <p>Of late, I've also worked around representation learning, more specifically on model aggregation,alignment, and fusion. My recent research investigates the application of Optimal Transport theory to fusing independently trained Transformers with heterogeneous depths.The central idea is to establish structural and parameter-level correspondences between networks across different scales, using Fused Gromov–Wasserstein transport, Bures–Wasserstein geometry, and entropic Sinkhorn transport. An interesting aspect of this work has been examining the assumptions underlying network alignment and understanding how different alignment strategies influence the eventual fusion of neural representations. The project originated during my research internship at National Chung Cheng University (CCU), Taiwan, under the Taiwan Experience Education Program (TEEP) in the summer of 2026.We are hopeful to publish our work early next year.</p>
-    <p>Apart from all this, I find joy in cooking, making kimchi during gimjang and hosting lunches for people.I also write occasionally, and some of my ramblings find their way onto <a class="link" href="https://medium.com/@biswadeepch11" target="_blank" rel="noopener">Medium</a>.Although I loved reading through my teenage years, that habit has transcended more into writing now : mostly random thoughts mixed with nostalgic fragments that occur to me at times.</p>
-    <p>Outside all this, I'm always up for a conversation about post-war history, the origin stories behind our food , and aviation, preferably over a cup of Oolong tea.</p>
-  </div>
-
-  <ul class="plain rv" style="margin-top:1.5rem">
-    <li><a class="link" href="mailto:biswadeep23@iiserb.ac.in">Email</a></li>
-    <li><a class="link" href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener">LinkedIn</a></li>
-    <li><a class="link" href="https://github.com/biswakim" target="_blank" rel="noopener">GitHub</a></li>
-    <li><a class="link" href="https://medium.com/@biswadeepch11" target="_blank" rel="noopener">Medium</a></li>
-    <li><a class="link" href="cv.pdf" target="_blank" rel="noopener">Curriculum Vitae</a></li>
-  </ul>
-
-  <!-- ===== WHAT'S NEW ===== -->
-  <section id="news">
-    <h2>What's new</h2>
-    <ul class="plain news rv">
-      <li><span class="when">11/2026:</span> Wrapped the federated learning study on heterogeneous Indian judicial data at IISER Bhopal.</li>
-      <li><span class="when">10/2026:</span> Started <a class="link" href="#work">ApataniLex</a>, an audio-first lexical retrieval framework for Apatani.</li>
-      <li><span class="when">08/2026:</span> Concluded the TEEP research internship at National Chung Cheng University, Taiwan; manuscript on Bures–Wasserstein transformer fusion in preparation.</li>
-      <li><span class="when">06/2026:</span> Began the TEEP internship at CCU, Chiayi, on optimal transport for model fusion.</li>
-      <li><span class="when">01/2026:</span> Co-founded NEVISTA, the first Northeast fest at IISER Bhopal, and served as its first Convenor.</li>
-    </ul>
-  </section>
-
-  <!-- ===== EXPERIENCE ===== -->
-  <section id="experience">
-    <h2>Experience</h2>
-    <ol class="entries rv">
-      <li>
-        <dl class="fields">
-          <dt>Date</dt><dd>Jun 2026 – Aug 2026</dd>
-          <dt>Institution</dt><dd><strong>National Chung Cheng University</strong>, Chiayi, Taiwan</dd>
-          <dt>Role</dt><dd>Research Intern, Dept. of Computer Science &amp; Information Engineering (TEEP)</dd>
-          <dt>Advisor</dt><dd>Dr Tsung-Wei Chiang</dd>
-        </dl>
-      </li>
-      <li>
-        <dl class="fields">
-          <dt>Date</dt><dd>Jun 2025 – Jul 2025</dd>
-          <dt>Institution</dt><dd><strong>IIT Mandi</strong>, Himachal Pradesh</dd>
-          <dt>Role</dt><dd>Summer Research Intern</dd>
-          <dt>Advisor</dt><dd>Dr Dinesh Singh</dd>
-        </dl>
-      </li>
-      <li>
-        <dl class="fields">
-          <dt>Date</dt><dd>Dec 2024 – Jan 2025</dd>
-          <dt>Institution</dt><dd><strong>IIT Bhubaneswar</strong>, Odisha</dd>
-          <dt>Role</dt><dd>Winter Research Intern, School of Electrical and Computer Sciences</dd>
-          <dt>Advisor</dt><dd>Dr Shreya Ghosh, Dr Abhik Jana</dd>
-        </dl>
-      </li>
-    </ol>
-
-    <h2 style="margin-top:2.5rem">Education</h2>
-    <ol class="entries rv">
-      <li>
-        <dl class="fields">
-          <dt>Date</dt><dd>2023 – present</dd>
-          <dt>Institution</dt><dd><strong>IISER Bhopal</strong></dd>
-          <dt>Degree</dt><dd>B.S. in Computer Science and Engineering · Expected Jul 2027</dd>
-        </dl>
-      </li>
-      <li>
-        <dl class="fields">
-          <dt>Date</dt><dd>2020 – 2022</dd>
-          <dt>Institution</dt><dd><strong>Vivekananda Kendra Vidyalaya</strong>, Nirjuli</dd>
-          <dt>Degree</dt><dd>Higher Secondary (CBSE) · 95.3%</dd>
-        </dl>
-      </li>
-      <li>
-        <dl class="fields">
-          <dt>Date</dt><dd>2010 – 2020</dd>
-          <dt>Institution</dt><dd><strong>Vivekananda Kendra Vidyalaya</strong>, Nirjuli</dd>
-          <dt>Degree</dt><dd>Secondary (CBSE) · 98% · Ranked 2<sup>nd</sup> in the state</dd>
-        </dl>
-      </li>
-    </ol>
-  </section>
-
-  <!-- ===== WORK ===== -->
-  <section id="work">
-    <h2>Selected work</h2>
-
-    <article class="work rv">
-      <h3>Heterogeneous transformer fusion along statistical manifolds: a Bures–Wasserstein approach</h3>
-      <div class="byline"><b>Chakraborty Biswadeep</b>, Tsung-Wei Chiang</div>
-      <div class="venue">Manuscript in preparation · CCU Taiwan · Jun 2026 – Oct 2026</div>
-      <p>Fusing heterogeneous vision transformers by formulating model fusion as a computational graph alignment problem. Fused Gromov–Wasserstein transport handles the macro structure, Wasserstein barycentric synthesis resolves the depth mismatch without heuristic identity padding, and Sinkhorn alignment handles parameters. A permutation-invariance property of Bures–Wasserstein synthesis shows that hard row-axis alignment is discarded during covariance-based interpolation.</p>
-      <div class="bracketed"><span>Optimal Transport</span><span>Model Fusion</span><span>Vision Transformers</span></div>
-    </article>
-
-    <article class="work rv">
-      <h3>Beyond acoustic matching: context-aware spoken lexical retrieval for Apatani</h3>
-      <div class="byline"><b>Chakraborty Biswadeep</b></div>
-      <div class="venue">Independent research initiative · Oct 2026 – present</div>
-      <p>An audio-first, orthography-independent retrieval framework for Apatani, an indigenous language of Arunachal Pradesh. It identifies words from complete, partial and contextually ambiguous speech without romanised input, ranking candidates on contextual evidence rather than acoustic similarity alone, and introduces ApataniLex, a benchmark with native-speaker validation.</p>
-      <div class="bracketed"><span>Speech</span><span>Low-resource NLP</span></div>
-    </article>
-
-    <article class="work rv">
-      <h3>Federated learning for heterogeneous Indian judicial data</h3>
-      <div class="byline"><b>Chakraborty Biswadeep</b>, Haroon R. Lone</div>
-      <div class="venue">IISER Bhopal · Aug 2026 – Nov 2026</div>
-      <p>Privacy-preserving machine learning across decentralised judicial datasets. Federated architectures that keep data local; non-IID distributions arising from jurisdictional differences, procedural variations and heterogeneous case characteristics; and aggregation strategies weighed on predictive performance, client-level fairness and robustness to unreliable participants.</p>
-      <div class="bracketed"><span>Federated Learning</span><span>Non-IID</span></div>
-    </article>
-
-    <article class="work rv">
-      <h3>Deep generative systems for indigenous textile archiving</h3>
-      <div class="byline"><b>Chakraborty Biswadeep</b></div>
-      <div class="venue">Independent · Jun 2025 – present</div>
-      <p>Applying deep learning to digitise, classify and re-envision the indigenous handloom motifs of Arunachal Pradesh. CNN/GAN pipelines for regional motif classification and generative synthesis, a searchable dataset integrating visual data, metadata and cultural narratives, and a prototype AI-assisted pattern-design toolkit using neural style transfer.</p>
-      <div class="bracketed"><span>CNN</span><span>GAN</span><span>Style Transfer</span></div>
-    </article>
-
-    <article class="work rv">
-      <h3>Drone surveillance scheduling &amp; multi-agent trajectory prediction</h3>
-      <div class="byline"><b>Chakraborty Biswadeep</b>, Dinesh Singh</div>
-      <div class="venue">IIT Mandi · Jun 2025 – Jul 2025</div>
-      <p>Two problems concerning drone operations. First: scheduling drone patrols to minimise flight time under patrol-interval constraints — ILP, Greedy, Simulated Annealing and a novel multi-stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal) for high coverage at reduced runtime. Second: the Trajectron model for multi-agent trajectory prediction using CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY with competitive ADE/FDE/NLL and outperforming baselines such as SGAN.</p>
-      <div class="bracketed"><span>ILP</span><span>Simulated Annealing</span><span>CVAEs</span></div>
-    </article>
-
-    <article class="work rv">
-      <h3>Geospatial knowledge inference with LLMs</h3>
-      <div class="byline"><b>Chakraborty Biswadeep</b>, Shreya Ghosh, Abhik Jana</div>
-      <div class="venue">Microsoft Academic Partnership Grant 2024 · IIT Bhubaneswar · Dec 2024 – Jan 2025</div>
-      <p>The data backbone for an LLM-powered travel decision system: personalised travel-planning workflows on top of LLMs, web scraping with Playwright, API integration, geospatial dataset curation with Geopy, and automated processing to support scalable real-world analysis.</p>
-      <div class="bracketed"><span>LLMs</span><span>Playwright</span><span>Geopy</span></div>
-    </article>
-
-    <div class="bracketed rv" style="margin-top:-0.75rem">
-      <a href="https://github.com/biswakim" target="_blank" rel="noopener">All repositories</a>
+  <!-- ===== INTRO ===== -->
+  <div class="intro rv">
+    <div class="avatar" id="avatar">
+      <img src="me.jpg" alt="Chakraborty Biswadeep"
+           onerror="this.remove(); document.getElementById('avatar').classList.add('empty');">
+      <span aria-hidden="true">CB</span>
     </div>
+    <div>
+      <h1>Chakraborty Biswadeep</h1>
+      <div class="who">B.S. Computer Science &amp; Engineering, IISER Bhopal<br>Human-Centred AI · Representation Learning</div>
+    </div>
+  </div>
+
+  <div class="links-row rv">
+    <div class="links">
+    <a href="mailto:biswadeep23@iiserb.ac.in">Email</a>
+    <a href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/biswakim" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://medium.com/@biswadeepch11" target="_blank" rel="noopener">Medium</a>
+    <a href="cv.pdf" target="_blank" rel="noopener">CV</a>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="sec" id="about">
+    <h2>About</h2>
+    <div class="prose rv">
+      <p>Born and raised in Naharlagun,a small town nestled in the northeasternmost state of India,Arunachal Pradesh,where the sun makes its first appearance over the country,I grew up with rather limited exposure to computer science and technology in general.Mathematics, however, was an early fascination.It was only in high school that I first encountered Python and SQL,and the prospect of translating mathematical ideas into code gradually took hold. Computer Science seemed a rather natural choice for university, being,to my mind, one of the most direct ways of putting mathematics to work.</p>
+      <p>I like working around problems concerning humans and solving them using AI.AI for humans, or humans for AI? Both ways, actually.I'm interested in human-centred intelligent systems particularly in social and cultural contexts.Currently I'm working on an audio-based lexical retrieval system for Apatani,an indigenous dialect of Arunachal Pradesh. The project focuses on using speech representations and contextual information to retrieve words and expressions from complete, partial, or ambiguous speech, without relying on standardised romanised input since the dialect doesn't have a agreed upon script.I have also been exploring the use of deep generative models to document, classify, and generate traditional handloom motifs of indigenous communities in Arunachal Pradesh. The broader idea is to investigate how computer vision and generative modelling might contribute to documenting and reinterpreting indigenous visual traditions. Although the project began some time ago, it remains in its innate stage, largely because assembling a sufficiently extensive and well-documented dataset has proved more challenging than initially anticipated. Much of our current effort is therefore directed towards collecting additional samples and documenting the motifs, while ensuring that the cultural context and narratives associated with them are not lost in the process.</p>
+      <p>Of late, I've also worked around representation learning, more specifically on model aggregation,alignment, and fusion. My recent research investigates the application of Optimal Transport theory to fusing independently trained Transformers with heterogeneous depths.The central idea is to establish structural and parameter-level correspondences between networks across different scales, using Fused Gromov–Wasserstein transport, Bures–Wasserstein geometry, and entropic Sinkhorn transport. An interesting aspect of this work has been examining the assumptions underlying network alignment and understanding how different alignment strategies influence the eventual fusion of neural representations. The project originated during my research internship at National Chung Cheng University (CCU), Taiwan, under the Taiwan Experience Education Program (TEEP) in the summer of 2026.We are hopeful to publish our work early next year.</p>
+      <p>Apart from all this, I find joy in cooking, making kimchi during gimjang and hosting lunches for people.I also write occasionally, and some of my ramblings find their way onto Medium.Although I loved reading through my teenage years, that habit has transcended more into writing now : mostly random thoughts mixed with nostalgic fragments that occur to me at times.</p>
+      <p>Outside all this, I'm always up for a conversation about post-war history, the origin stories behind our food , and aviation, preferably over a cup of Oolong tea.</p>
+      <p><a class="inline" href="https://medium.com/@biswadeepch11/hiraeth-a-home-in-arunachal-1426e289ca23" target="_blank" rel="noopener">Read on Medium: Hiraeth, A Home in Arunachal ↗</a></p>
+    </div>
+
+    <dl class="kv rv" style="margin-top:2.25rem">
+      <dt>Interests</dt>
+      <dd>Human-Centred AI · Representation Learning · Federated Learning</dd>
+      <dt>Exploring</dt>
+      <dd>Low-resource NLP</dd>
+      <dt>Want to explore</dt>
+      <dd>Reinforcement Learning · Robotics</dd>
+      <dt>Languages</dt>
+      <dd>Bengali (native) · Hindi (native) · English (professional) · Assamese (rudimentary)</dd>
+    </dl>
   </section>
 
-  <!-- ===== RECORD ===== -->
-  <section id="record">
-    <h2>Honours &amp; awards</h2>
-    <ol class="records rv">
-      <li><span class="yr">2022</span><strong>Acceptance into New York University</strong><span class="org">Computer Science &amp; Mathematics program, Class of 2026.</span></li>
-      <li><span class="yr">2021</span><strong>Dera Natung Award for Academic Excellence</strong><span class="org">Government of Arunachal Pradesh.</span></li>
-      <li><span class="yr">2019</span><strong>State Merit Scholarship</strong><span class="org">Ranked 1<sup>st</sup> in the state, Government of Arunachal Pradesh.</span></li>
-    </ol>
+  <!-- ===== RESEARCH ===== -->
+  <section class="sec" id="research">
+    <h2>Research experience</h2>
 
-    <h2 style="margin-top:2.5rem">Leadership &amp; extracurricular</h2>
-    <ol class="records rv">
-      <li><span class="yr">2026</span><strong>NEVISTA, North-East Fest of IISER Bhopal</strong><span class="org">Co-founder and first Convenor. A first edition inherits no template: the format, the programme and the team were all built from nothing.</span></li>
-      <li><span class="yr">2020 – 2021</span><strong>Be the Voice</strong><span class="org">An NGO co-founded in high school for stray animal feeding, medical treatment, adoption and abuse reporting across the Itanagar capital region.</span></li>
-      <li><span class="yr">Ongoing</span><strong>Writing &amp; cooking</strong><span class="org">Essays on Medium; a connoisseur of cuisines around the world, with a particular fondness for homecooked food that has become an amalgam of Bengali and Arunachali elements.</span></li>
-    </ol>
+    <article class="entry rv">
+      <h3>Heterogeneous transformer fusion along statistical manifolds: a Bures–Wasserstein approach</h3>
+      <div class="meta">National Chung Cheng University, Taiwan · Research Intern · Jun 2026 – Aug 2026 · TEEP, Chiayi<span class="now">Most recent</span></div>
+      <p>Dept. of Computer Science and Information Engineering. The work develops a multi-scale fusion pipeline and, more importantly, examines which component actually drives its performance. Through an analytical study of Wasserstein barycentric interpolation under the Bures metric, I show that the fused weights depend on distributional statistics that are invariant to row permutations, meaning permutation alignment is not the mechanism responsible for the observed gains.</p>
+      <p>Experiments across multiple alignment settings support this: hard permutation alignment is statistically indistinguishable from no alignment, while replacing Bures interpolation with Euclidean interpolation substantially degrades zero-shot fusion performance. The benefit of optimal-transport-based fusion, in this setting, comes from distributional matching of weight statistics rather than resolving permutation symmetry.</p>
+      <div class="tags"><span>Optimal Transport</span><span>Fused Gromov–Wasserstein</span><span>Sinkhorn</span><span>Vision Transformers</span></div>
+    </article>
 
-    <h2 style="margin-top:2.5rem">Technical ingredients</h2>
+    <article class="entry rv">
+      <h3>Drone surveillance &amp; trajectory prediction</h3>
+      <div class="meta">IIT Mandi · Summer Research Intern · Jun 2025 – Jul 2025 · Mandi, HP</div>
+      <p>Under Dr Dinesh Singh, I worked on two problems concerning drone operations. First: scheduling drone patrols to minimise flight time under patrol-interval constraints — ILP, Greedy, Simulated Annealing and a novel multi-stage method, tested on real campus maps (Ritsumeikan University, IISER Bhopal) for high coverage at reduced runtime. Second: the Trajectron model for multi-agent trajectory prediction using CVAEs and dynamic spatiotemporal graphs, evaluated on ETH/UCY with competitive ADE/FDE/NLL and outperforming baselines such as SGAN.</p>
+      <div class="tags"><span>PyTorch</span><span>ILP</span><span>CVAEs</span><span>Simulated Annealing</span><span>Spatiotemporal Graphs</span></div>
+    </article>
+
+    <article class="entry rv">
+      <h3>Geospatial knowledge inference with LLMs</h3>
+      <div class="meta">IIT Bhubaneswar · Winter Research Intern · Dec 2024 – Jan 2025 · Bhubaneswar, Odisha</div>
+      <p>School of Electrical and Computer Sciences, with Dr Shreya Ghosh and Dr Abhik Jana, on the Microsoft Academic Partnership Grant 2024 project “Geospatial Knowledge Inference Using LLMs for Enhanced Travel Decision-Making.” I built personalised travel-planning workflows on top of LLMs and the data engineering underneath them: web scraping with Playwright, API integration, geospatial dataset curation with Geopy, and automated processing to support scalable real-world analysis.</p>
+      <div class="tags"><span>LLMs</span><span>Playwright</span><span>Geopy</span><span>Data Engineering</span></div>
+    </article>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section class="sec" id="projects">
+    <h2>Projects</h2>
+
+    <article class="entry rv">
+      <h3>Heterogeneous transformer fusion along statistical manifolds: a Bures–Wasserstein approach</h3>
+      <div class="meta">CCU Taiwan · Jun 2026 – Oct 2026</div>
+      <p>Fusing heterogeneous vision transformers by formulating model fusion as a computational graph alignment problem. Fused Gromov–Wasserstein transport handles the macro structure, Wasserstein barycentric synthesis resolves the depth mismatch without heuristic identity padding, and Sinkhorn alignment handles parameters.</p>
+      <div class="tags"><span>Optimal Transport</span><span>Model Fusion</span></div>
+    </article>
+
+    <article class="entry rv">
+      <h3>Federated learning for heterogeneous Indian judicial data</h3>
+      <div class="meta">IISER Bhopal · Aug 2026 – Nov 2026</div>
+      <p>Privacy-preserving machine learning across decentralised judicial datasets, under Dr Haroon R. Lone. Federated architectures that keep data local; non-IID distributions arising from jurisdictional differences, procedural variations and heterogeneous case characteristics; and aggregation strategies weighed on predictive performance, client-level fairness and robustness to unreliable participants.</p>
+      <div class="tags"><span>Federated Learning</span><span>Non-IID</span></div>
+    </article>
+
+    <article class="entry rv">
+      <h3>Beyond acoustic matching: spoken lexical retrieval for Apatani</h3>
+      <div class="meta">Independent · Oct 2026 –<span class="now">Ongoing</span></div>
+      <p>An audio-first, orthography-independent retrieval framework for Apatani, an indigenous language of Arunachal Pradesh. It identifies words from complete, partial and contextually ambiguous speech without romanised input, ranking candidates on contextual evidence rather than acoustic similarity alone, and introduces ApataniLex, a benchmark with native-speaker validation.</p>
+      <div class="tags"><span>Speech</span><span>Low-resource NLP</span></div>
+    </article>
+
+    <article class="entry rv">
+      <h3>Geospatial LLM inference for travel</h3>
+      <div class="meta">IIT Bhubaneswar · Dec 2024 – Jan 2025</div>
+      <p>The data backbone for an LLM-powered travel decision system: scraping flight data, curating geospatial datasets for Indian destinations, integrating APIs. The kind of infrastructure work that makes “AI-powered” tools actually function.</p>
+      <div class="tags"><span>LLMs</span><span>Data Engineering</span><span>Geospatial</span></div>
+    </article>
+
+    <article class="entry rv">
+      <h3>Deep generative systems for indigenous textile archiving</h3>
+      <div class="meta">Independent · Jun 2025 –<span class="now">Ongoing</span></div>
+      <p>Applying deep learning to digitise, classify and re-envision the indigenous handloom motifs of Arunachal Pradesh. CNN/GAN pipelines for regional motif classification and generative synthesis, a searchable dataset integrating visual data, metadata and cultural narratives, and a prototype AI-assisted pattern-design toolkit using neural style transfer.</p>
+      <div class="tags"><span>CNN</span><span>GAN</span><span>Style Transfer</span></div>
+    </article>
+
+    <article class="entry rv">
+      <h3>Code, notebooks and experiments</h3>
+      <div class="meta">Repositories</div>
+      <p>Everything else lives on GitHub. <a class="inline" href="https://github.com/biswakim" target="_blank" rel="noopener">Browse the repositories ↗</a></p>
+    </article>
+  </section>
+
+  <!-- ===== TOOLKIT ===== -->
+  <section class="sec" id="toolkit">
+    <h2>Technical ingredients</h2>
     <dl class="kv rv">
       <dt>Programming</dt><dd>Python · C · SQL</dd>
       <dt>Machine learning</dt><dd>PyTorch · Scikit-learn · OpenCV</dd>
@@ -563,20 +523,76 @@ footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim)
       <dt>Mathematics</dt><dd>Linear algebra · Probability &amp; statistics · Optimisation, calculus</dd>
       <dt>Tools</dt><dd>Jupyter, Mathematica · AutoCAD · Microsoft Office</dd>
       <dt>Web</dt><dd>Playwright · Geopy · API integration</dd>
-      <dt>Languages</dt><dd>Bengali (native) · Hindi (native) · English (professional) · Assamese (rudimentary)</dd>
     </dl>
+  </section>
+
+  <!-- ===== BEYOND ===== -->
+  <section class="sec" id="beyond">
+    <h2>Outside academics</h2>
+
+    <article class="entry rv">
+      <h3>NEVISTA — the first Northeast fest at IISER Bhopal</h3>
+      <div class="meta">Co-founder · First Convenor</div>
+      <p>Co-founder of NEVISTA, the first Northeast fest at IISER Bhopal, and its first Convenor. A first edition inherits no template: the format, the programme and the team were all built from nothing, which is a different kind of problem from any of the ones above.</p>
+    </article>
+
+    <article class="entry rv">
+      <h3>Be the Voice</h3>
+      <div class="meta">Co-founder · Community</div>
+      <p>An NGO co-founded in high school for stray animal feeding, medical treatment, adoption and abuse reporting across the Itanagar capital region. Not a tech project rather a people project, and the hardest problems in it weren't computational.</p>
+    </article>
+
+    <article class="entry rv">
+      <h3>Essays on Medium</h3>
+      <div class="meta">Writing</div>
+      <p>Reading was the teenage habit; writing is what it became. Mostly random thoughts braided with nostalgic fragments: home, distance, and many stories from the northeasternmost corner of India where the sun rises first.</p>
+    </article>
+
+    <article class="entry rv">
+      <h3>Cooking since eight</h3>
+      <div class="meta">Kitchen · Since 2013</div>
+      <p>A connoisseur of cuisines around the world,I have always enjoyed experimenting new recipes,but my favourite cuisine has to be soulful homecooked food,that has become an amalgam of Bengali and Arunachali elements.</p>
+    </article>
+  </section>
+
+  <!-- ===== AWARDS ===== -->
+  <section class="sec" id="awards">
+    <h2>Honours &amp; awards</h2>
+    <div class="rv">
+      <div class="line"><span class="yr">2022</span><span class="what"><strong>Acceptance into New York University</strong><span>Computer Science &amp; Mathematics program, Class of 2026.</span></span></div>
+      <div class="line"><span class="yr">2021</span><span class="what"><strong>Dera Natung Award for Academic Excellence</strong><span>Government of Arunachal Pradesh.</span></span></div>
+      <div class="line"><span class="yr">2019</span><span class="what"><strong>State Merit Scholarship</strong><span>Ranked 1<sup>st</sup> in the state, Government of Arunachal Pradesh.</span></span></div>
+    </div>
+  </section>
+
+  <!-- ===== EDUCATION ===== -->
+  <section class="sec" id="education">
+    <h2>Education</h2>
+    <div class="rv">
+      <div class="line"><span class="yr">2023 – present</span><span class="what"><strong>IISER Bhopal</strong><span>B.S. in Computer Science and Engineering · Expected Jul 2027</span></span></div>
+      <div class="line"><span class="yr">2020 – 2022</span><span class="what"><strong>Vivekananda Kendra Vidyalaya, Nirjuli</strong><span>Higher Secondary (CBSE) · 95.3%</span></span></div>
+      <div class="line"><span class="yr">2010 – 2020</span><span class="what"><strong>Vivekananda Kendra Vidyalaya, Nirjuli</strong><span>Secondary (CBSE) · 98% · Ranked 2<sup>nd</sup> in the state</span></span></div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="sec contact" id="contact">
+    <h2>Contact</h2>
+    <div class="rv">
+      <p>I'm always up for a good conversation. Whether it's about research collaboration, a project idea, or just a recipe recommendation;I'd love to hear from you.</p>
+      <div class="links" style="margin-bottom:0">
+        <a href="mailto:biswadeep23@iiserb.ac.in">biswadeep23@iiserb.ac.in</a>
+        <a href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/biswakim" target="_blank" rel="noopener">GitHub</a>
+        <a href="cv.pdf" target="_blank" rel="noopener">CV</a>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer>
-  <div class="foot-nav">
-    <a href="#top">About</a>
-    <a href="#news">What's new</a>
-    <a href="#experience">Experience</a>
-    <a href="#work">Work</a>
-    <a href="#record">Record</a>
-  </div>
-  <p>© 2026 Chakraborty Biswadeep. Cooked with love and compassion.</p>
+  <span>© 2026 Chakraborty Biswadeep</span>
+  <span>Cooked with love and compassion</span>
 </footer>
 
 <script>
@@ -611,8 +627,11 @@ footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim)
   function easeIO(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function lerp(a, b, t) { return a + (b - a) * t; }
+  function ease3(t) { return 1 - Math.pow(1 - t, 3); }
 
-  /* ---------- the opening: points resolve into an architecture ---------- */
+  /* =================================================================
+     OVERTURE — scattered points resolve into the architecture
+     ================================================================= */
 
   var overture = document.getElementById('overture');
   var otc = document.getElementById('ot');
@@ -658,6 +677,7 @@ footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim)
         for (k = 0; k < layers[i + 1].length; k++)
           EB.push([layers[i][j], layers[i + 1][k]]);
 
+    // the same points, scattered to begin with
     FA = [];
     for (i = 0; i < FB.length; i++) {
       var ang = Math.random() * Math.PI * 2;
@@ -762,7 +782,7 @@ footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim)
 
   /* ---------- page behaviour ---------- */
 
-  var SECTION_IDS = ['top', 'news', 'experience', 'work', 'record'];
+  var SECTION_IDS = ['about','research','projects','toolkit','beyond','awards','education','contact'];
 
   var rt;
   window.addEventListener('resize', function () {
@@ -776,7 +796,7 @@ footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-dim)
   document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
 
   var links = {};
-  Array.prototype.forEach.call(document.querySelectorAll('.menu a[data-id]'), function (a) {
+  Array.prototype.forEach.call(document.querySelectorAll('.bar a[data-id]'), function (a) {
     links[a.getAttribute('data-id')] = a;
   });
 
