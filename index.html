@@ -30,8 +30,9 @@
   --sans: 'Schibsted Grotesk', system-ui, -apple-system, sans-serif;
   --mono: 'Spline Sans Mono', ui-monospace, 'SF Mono', monospace;
 
-  --col: 720px;
-  --pad: 1.75rem;
+  --col: 1020px;
+  --gutter: 150px;
+  --pad: 2rem;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -88,138 +89,19 @@ a { color: inherit; }
 
 .ot-skip:hover { color: var(--ink); }
 
-/* ================= STAGE ================= */
-.stage {
-  position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
-  background: var(--paper);
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.stage::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(115% 85% at 50% 45%, transparent 40%, rgba(0,0,0,0.55) 100%);
-  pointer-events: none;
-  z-index: 2;
-}
-
-#net { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
-
-.stage-head {
-  position: relative;
-  z-index: 4;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem var(--pad) 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
-  pointer-events: none;
-}
-
-.stage-name { font-family: var(--serif); font-size: 1.3rem; letter-spacing: -0.01em; }
-.stage-role { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.14em; color: var(--muted); margin-top: 0.4rem; }
-.stage-meta { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; color: var(--accent-dim); text-align: right; line-height: 1.9; }
-
-.node-layer { position: absolute; inset: 0; z-index: 3; }
-
-.node-btn {
-  position: absolute;
-  background: none; border: 0;
-  padding: 0.3rem 0.45rem;
-  cursor: pointer;
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  transition: color 0.3s, opacity 0.6s;
-  white-space: nowrap;
-  opacity: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.node-btn.on { opacity: 1; }
-.node-btn:hover { color: var(--accent-bright); }
-.node-btn .idx { font-size: 0.55rem; color: var(--accent-dim); }
-.node-btn.right { transform: translate(0, -50%); }
-.node-btn.below { transform: translate(-50%, 0); }
-.node-btn.above { transform: translate(-50%, -100%); }
-.node-btn.cv { color: var(--accent); text-decoration: none; letter-spacing: 0.18em; }
-.node-btn.cv:hover { color: var(--accent-bright); }
-
-.layer-cap {
-  position: absolute;
-  transform: translate(-50%, 0);
-  font-family: var(--mono);
-  font-size: 0.54rem;
-  letter-spacing: 0.2em;
-  color: #55534f;
-  opacity: 0;
-  transition: opacity 1.2s ease 0.4s;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.layer-cap.on { opacity: 1; }
-
-.stage-foot {
-  position: absolute;
-  left: 0; right: 0; bottom: 1.75rem;
-  z-index: 4;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 var(--pad);
-  display: flex;
-  justify-content: flex-end;
-  pointer-events: none;
-}
-
-.hint {
-  font-family: var(--mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.16em;
-  color: var(--accent-dim);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.hint::after {
-  content: '';
-  width: 24px; height: 1px;
-  background: var(--accent-dim);
-  animation: slide 2.6s ease-in-out infinite;
-}
-
-@keyframes slide {
-  0%, 100% { transform: scaleX(0.3); opacity: 0.4; transform-origin: left; }
-  50% { transform: scaleX(1); opacity: 1; transform-origin: left; }
-}
-
 /* ================= TOP BAR ================= */
 .bar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
+  position: sticky;
+  top: 0;
   z-index: 100;
-  background: rgba(10,10,11,0.86);
+  background: rgba(10,10,11,0.88);
   backdrop-filter: blur(14px);
-  transform: translateY(-105%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-.bar.show { transform: translateY(0); }
 
 .bar-in {
   max-width: var(--col);
   margin: 0 auto;
-  padding: 0.85rem var(--pad);
+  padding: 1rem var(--pad);
   display: flex;
   gap: 1.1rem;
   flex-wrap: wrap;
@@ -243,14 +125,40 @@ a { color: inherit; }
 .page {
   max-width: var(--col);
   margin: 0 auto;
-  padding: 4.5rem var(--pad) 0;
+  padding: 3.5rem var(--pad) 0;
 }
 
+/* a section is a label in the gutter and content beside it */
+.sec {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  column-gap: 2.75rem;
+}
+
+.sec > h2 { grid-column: 1; }
+.sec > *:not(h2) { grid-column: 2; }
+
 /* intro */
-.intro { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
+.intro {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  column-gap: 2.75rem;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.links-row {
+  display: grid;
+  grid-template-columns: var(--gutter) minmax(0, 1fr);
+  column-gap: 2.75rem;
+  margin-bottom: 3.5rem;
+}
+
+.links-row .links { grid-column: 2; margin-bottom: 0; }
 
 .avatar {
-  width: 96px; height: 96px;
+  width: 128px; height: 128px;
+  justify-self: end;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
@@ -303,6 +211,9 @@ a { color: inherit; }
 .sec { padding-bottom: 3.75rem; scroll-margin-top: 4rem; }
 
 .sec > h2 {
+  position: sticky;
+  top: 4.5rem;
+  align-self: start;
   font-family: var(--mono);
   font-weight: 500;
   font-size: 0.64rem;
@@ -319,6 +230,7 @@ a { color: inherit; }
   to { opacity: 1; transform: none; }
 }
 
+.prose { max-width: 74ch; }
 .prose p { font-size: 1rem; color: var(--ink-soft); line-height: 1.85; margin-bottom: 1.15rem; }
 .prose p:last-of-type { margin-bottom: 0; }
 
@@ -366,7 +278,7 @@ a { color: inherit; }
 
 .entry .meta .now { color: var(--paper); background: var(--accent); padding: 0.1rem 0.4rem; margin-left: 0.5rem; font-size: 0.55rem; letter-spacing: 0.1em; }
 
-.entry p { font-size: 0.93rem; color: var(--ink-soft); line-height: 1.8; }
+.entry p { font-size: 0.93rem; color: var(--ink-soft); line-height: 1.8; max-width: 76ch; }
 .entry p + p { margin-top: 0.7rem; }
 
 .tags { display: flex; flex-wrap: wrap; gap: 0.3rem 0.75rem; margin-top: 0.75rem; }
@@ -396,7 +308,7 @@ a { color: inherit; }
 .line .what span { font-size: 0.86rem; color: var(--muted); }
 
 /* key-value lists */
-.kv { display: grid; grid-template-columns: 9rem 1fr; gap: 0.55rem 1.25rem; }
+.kv { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 0.6rem 1.5rem; max-width: 760px; }
 
 .kv dt {
   font-family: var(--mono);
@@ -435,16 +347,22 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-
   .sec.bloom > h2 { animation: none; }
 }
 
+@media (max-width: 860px) {
+  :root { --pad: 1.4rem; }
+  .sec, .intro, .links-row { grid-template-columns: 1fr; column-gap: 0; }
+  .sec > *:not(h2), .links-row .links { grid-column: 1; }
+  .sec > h2 { position: static; margin-bottom: 1.1rem; }
+  .intro { grid-template-columns: auto 1fr; column-gap: 1.2rem; }
+}
+
 @media (max-width: 620px) {
   :root { --pad: 1.2rem; }
-  .page { padding-top: 3rem; }
-  .intro { gap: 1.1rem; }
-  .avatar { width: 72px; height: 72px; }
+  .page { padding-top: 2rem; }
+  .avatar { width: 84px; height: 84px; justify-self: start; }
   .line { flex-direction: column; gap: 0.2rem; }
   .line .yr { flex: none; }
   .kv { grid-template-columns: 1fr; gap: 0.2rem; }
   .kv dd { margin-bottom: 0.6rem; }
-  .stage-meta { display: none; }
   .bar .home { display: none; }
 }
 </style>
@@ -458,29 +376,10 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-
   <button class="ot-skip" id="otSkip" type="button">skip</button>
 </div>
 
-<!-- ================= STAGE ================= -->
-<header class="stage" id="stage">
-  <canvas id="net"></canvas>
-
-  <div class="stage-head">
-    <div>
-      <div class="stage-name">Chakraborty Biswadeep</div>
-      <div class="stage-role">Human-Centred AI · Representation Learning</div>
-    </div>
-    <div class="stage-meta">IISER Bhopal<br>EECS</div>
-  </div>
-
-  <div class="node-layer" id="nodeLayer"></div>
-
-  <div class="stage-foot">
-    <div class="hint">Tap a node to open</div>
-  </div>
-</header>
-
 <!-- ================= TOP BAR ================= -->
 <nav class="bar" id="bar">
   <div class="bar-in">
-    <a href="#stage" class="home">CB</a>
+    <a href="#top" class="home">CB</a>
     <a href="#about" data-id="about">About</a>
     <a href="#research" data-id="research">Research</a>
     <a href="#projects" data-id="projects">Projects</a>
@@ -492,7 +391,7 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-
   </div>
 </nav>
 
-<main class="page">
+<main class="page" id="top">
 
   <!-- ===== INTRO ===== -->
   <div class="intro rv">
@@ -507,12 +406,14 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-
     </div>
   </div>
 
-  <div class="links rv">
+  <div class="links-row rv">
+    <div class="links">
     <a href="mailto:biswadeep23@iiserb.ac.in">Email</a>
     <a href="https://www.linkedin.com/in/biswc" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://github.com/biswakim" target="_blank" rel="noopener">GitHub</a>
     <a href="https://medium.com/@biswadeepch11" target="_blank" rel="noopener">Medium</a>
     <a href="cv.pdf" target="_blank" rel="noopener">CV</a>
+    </div>
   </div>
 
   <!-- ===== ABOUT ===== -->
@@ -868,7 +769,6 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-
     document.body.classList.remove('locked');
     try { sessionStorage.setItem('bc_seen', '1'); } catch (e) {}
     setTimeout(function () { overture.classList.add('gone'); }, 950);
-    startStage();
   }
 
   var seen = false;
@@ -880,314 +780,20 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-
     if (!finished && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) endOverture();
   });
 
-  /* =================================================================
-     STAGE — the neural navigation
-     ================================================================= */
+  /* ---------- page behaviour ---------- */
 
-  var SECTIONS = [
-    { id: 'about',     label: 'About',     idx: '01' },
-    { id: 'research',  label: 'Research',  idx: '02' },
-    { id: 'projects',  label: 'Projects',  idx: '03' },
-    { id: 'toolkit',   label: 'Toolkit',   idx: '04' },
-    { id: 'beyond',    label: 'Beyond',    idx: '05' },
-    { id: 'awards',    label: 'Awards',    idx: '06' },
-    { id: 'education', label: 'Education', idx: '07' },
-    { id: 'contact',   label: 'Contact',   idx: '08' }
-  ];
+  var SECTION_IDS = ['about','research','projects','toolkit','beyond','awards','education','contact'];
 
-  var cvs = document.getElementById('net');
-  var ctx = cvs.getContext('2d');
-  var layer = document.getElementById('nodeLayer');
-  var stage = document.getElementById('stage');
-
-  var W = 0, H = 0, vertical = false;
-  var nodes = [], edges = [], pulses = [], buttons = [], caps = [];
-  var hover = -1, start = performance.now(), stageOn = false;
-  var cvHover = false, cvBtn = null;
-  var CVN = 2;
-  var mouse = { x: 0, y: 0, on: false };
-  var HID = 4, OUT0 = 1 + HID;
-
-  function build() {
-    var rect = stage.getBoundingClientRect();
-    W = rect.width; H = rect.height;
-    vertical = W < 860;
-
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    cvs.width = Math.round(W * dpr);
-    cvs.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    nodes = []; edges = [];
-    var i, j, S = SECTIONS.length;
-
-    if (!vertical) {
-      nodes.push(mk(W * 0.16, H * 0.52, 9, 0, 'in'));
-      for (i = 0; i < HID; i++) nodes.push(mk(W * 0.42, lerp(H * 0.26, H * 0.78, i / (HID - 1)), 5, 1, 'hid'));
-      for (i = 0; i < S; i++) nodes.push(mk(W * 0.68, lerp(H * 0.16, H * 0.88, i / (S - 1)), 6.5, 2, 'out'));
-    } else {
-      var rows = Math.ceil(S / 2);
-      nodes.push(mk(W * 0.5, H * 0.11, 8, 0, 'in'));
-      for (i = 0; i < HID; i++) nodes.push(mk(lerp(W * 0.16, W * 0.84, i / (HID - 1)), H * 0.25, 4.5, 1, 'hid'));
-      for (i = 0; i < S; i++) {
-        var col = i % 2, row = Math.floor(i / 2);
-        nodes.push(mk(col === 0 ? W * 0.28 : W * 0.72, lerp(H * 0.42, H * 0.78, row / Math.max(1, rows - 1)), 6, 2, 'out'));
-      }
-    }
-
-    for (i = 1; i <= HID; i++) edges.push({ a: 0, b: i, w: 0.45 + Math.random() * 0.55 });
-    for (i = 1; i <= HID; i++) {
-      for (j = 0; j < S; j++) edges.push({ a: i, b: OUT0 + j, w: 0.3 + Math.random() * 0.7 });
-    }
-
-    if (nodes[CVN]) { nodes[CVN].cv = true; nodes[CVN].r = 6.5; }
-
-    placeButtons();
-  }
-
-  function mk(x, y, r, layerIdx, kind) {
-    return {
-      bx: x, by: y, x: x, y: y, r: r, layer: layerIdx, kind: kind,
-      ph: Math.random() * Math.PI * 2,
-      sp: 0.25 + Math.random() * 0.3,
-      amp: kind === 'in' ? 3 : 6,
-      delay: 0.2 + layerIdx * 0.42 + Math.random() * 0.2,
-      app: 0, glow: 0
-    };
-  }
-
-  function placeButtons() {
-    if (!buttons.length) {
-      SECTIONS.forEach(function (s, i) {
-        var b = document.createElement('button');
-        b.className = 'node-btn';
-        b.type = 'button';
-        b.innerHTML = '<span class="idx">' + s.idx + '</span><span>' + s.label + '</span>';
-        b.setAttribute('aria-label', 'Open ' + s.label + ' section');
-        b.addEventListener('click', function () { fire(i); });
-        b.addEventListener('mouseenter', function () { hover = i; });
-        b.addEventListener('mouseleave', function () { hover = -1; });
-        b.addEventListener('focus', function () { hover = i; });
-        b.addEventListener('blur', function () { hover = -1; });
-        layer.appendChild(b);
-        buttons.push(b);
-      });
-    }
-    if (!caps.length) {
-      ['input', 'hidden', 'sections'].forEach(function (txt) {
-        var c = document.createElement('span');
-        c.className = 'layer-cap';
-        c.textContent = txt;
-        c.setAttribute('aria-hidden', 'true');
-        layer.appendChild(c);
-        caps.push(c);
-      });
-    }
-
-    if (!cvBtn) {
-      cvBtn = document.createElement('a');
-      cvBtn.className = 'node-btn cv above';
-      cvBtn.href = 'cv.pdf';
-      cvBtn.target = '_blank';
-      cvBtn.rel = 'noopener';
-      cvBtn.innerHTML = '<span class="idx">↗</span><span>CV</span>';
-      cvBtn.setAttribute('aria-label', 'Open CV (PDF, new tab)');
-      cvBtn.addEventListener('mouseenter', function () { cvHover = true; });
-      cvBtn.addEventListener('mouseleave', function () { cvHover = false; });
-      cvBtn.addEventListener('focus', function () { cvHover = true; });
-      cvBtn.addEventListener('blur', function () { cvHover = false; });
-      cvBtn.addEventListener('click', function () {
-        var n = nodes[CVN];
-        if (n) n.glow = 1;
-        edges.forEach(function (e) { if (e.a === CVN || e.b === CVN) spawn(e, 1.6); });
-      });
-      layer.appendChild(cvBtn);
-    }
-    if (nodes[CVN]) {
-      cvBtn.style.left = nodes[CVN].bx + 'px';
-      cvBtn.style.top = (nodes[CVN].by - 13) + 'px';
-    }
-
-    var capNodes = [nodes[0], nodes[1], nodes[OUT0]];
-    caps.forEach(function (c, k) {
-      if (vertical || !capNodes[k]) { c.style.display = 'none'; return; }
-      c.style.display = 'block';
-      c.style.left = capNodes[k].bx + 'px';
-      c.style.top = (capNodes[k].by - 30) + 'px';
-      setTimeout(function () { c.classList.add('on'); }, 500);
-    });
-
-    buttons.forEach(function (b, i) {
-      var n = nodes[OUT0 + i];
-      if (!n) return;
-      b.classList.remove('right', 'below');
-      if (vertical) {
-        b.classList.add('below');
-        b.style.left = n.bx + 'px';
-        b.style.top = (n.by + 12) + 'px';
-      } else {
-        b.classList.add('right');
-        b.style.left = (n.bx + 18) + 'px';
-        b.style.top = n.by + 'px';
-      }
-    });
-  }
-
-  function fire(i) {
-    var target = OUT0 + i;
-    var n = nodes[target];
-    if (n) n.glow = 1;
-    edges.forEach(function (e) {
-      if (e.a === 0) spawn(e, 1.5);
-      if (e.b === target) spawn(e, 1.5, 0.28);
-    });
-    var sec = document.getElementById(SECTIONS[i].id);
-    if (!sec) return;
-    sec.classList.remove('bloom');
-    void sec.offsetWidth;
-    sec.classList.add('bloom');
-    setTimeout(function () {
-      sec.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
-    }, REDUCED ? 0 : 360);
-  }
-
-  function spawn(e, speed, delay) {
-    pulses.push({ e: e, p: -(delay || 0), sp: speed || (0.45 + Math.random() * 0.4) });
-  }
-
-  function draw(now) {
-    var t = (now - start) / 1000;
-    ctx.clearRect(0, 0, W, H);
-
-    nodes.forEach(function (n) {
-      var x = n.bx, y = n.by;
-      if (!REDUCED) {
-        x += Math.sin(t * n.sp + n.ph) * n.amp;
-        y += Math.cos(t * n.sp * 0.85 + n.ph) * n.amp;
-      }
-      if (mouse.on) {
-        var dx = mouse.x - x, dy = mouse.y - y;
-        var d = Math.sqrt(dx * dx + dy * dy);
-        if (d < 170 && d > 0.5) {
-          var f = (1 - d / 170) * 11;
-          x += dx / d * f; y += dy / d * f;
-        }
-      }
-      n.x = x; n.y = y;
-      n.app = REDUCED ? 1 : ease3(Math.max(0, Math.min(1, (t - n.delay) / 0.9)));
-      n.glow *= 0.955;
-    });
-
-    edges.forEach(function (e) {
-      var a = nodes[e.a], b = nodes[e.b];
-      var p = Math.min(a.app, b.app);
-      if (p <= 0.01) return;
-      var lit = (hover >= 0 && (e.a === 0 || e.b === OUT0 + hover)) ||
-                (cvHover && (e.a === CVN || e.b === CVN));
-      var alpha = (lit ? 0.85 : 0.28) * e.w * p;
-      ctx.strokeStyle = lit ? 'rgba(242,241,238,' + alpha + ')' : 'rgba(128,126,120,' + alpha + ')';
-      ctx.lineWidth = lit ? 1.5 : 0.7;
-      ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(lerp(a.x, b.x, p), lerp(a.y, b.y, p));
-      ctx.stroke();
-    });
-
-    for (var i = pulses.length - 1; i >= 0; i--) {
-      var pl = pulses[i];
-      pl.p += pl.sp * 0.016;
-      if (pl.p > 1.06) { pulses.splice(i, 1); continue; }
-      if (pl.p < 0) continue;
-      var na = nodes[pl.e.a], nb = nodes[pl.e.b];
-      var px = lerp(na.x, nb.x, pl.p), py = lerp(na.y, nb.y, pl.p);
-      var tx = lerp(na.x, nb.x, Math.max(0, pl.p - 0.09)), ty = lerp(na.y, nb.y, Math.max(0, pl.p - 0.09));
-      var g = ctx.createLinearGradient(tx, ty, px, py);
-      g.addColorStop(0, 'rgba(231,227,217,0)');
-      g.addColorStop(1, 'rgba(255,255,255,0.9)');
-      ctx.strokeStyle = g;
-      ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(px, py); ctx.stroke();
-      ctx.fillStyle = 'rgba(255,255,255,0.95)';
-      ctx.beginPath(); ctx.arc(px, py, 1.7, 0, 6.2832); ctx.fill();
-    }
-
-    nodes.forEach(function (n, i) {
-      if (n.app <= 0.01) return;
-      var isHover = (hover >= 0 && i === OUT0 + hover) || (n.cv && cvHover);
-      var r = n.r * (0.6 + 0.4 * n.app) * (isHover ? 1.4 : 1) * (1 + n.glow * 0.5);
-      var halo = r * (4.2 + n.glow * 3);
-      var gr = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, halo);
-      var strength = (isHover ? 0.3 : 0.13) * n.app + n.glow * 0.28;
-      gr.addColorStop(0, 'rgba(231,227,217,' + strength + ')');
-      gr.addColorStop(1, 'rgba(231,227,217,0)');
-      ctx.fillStyle = gr;
-      ctx.beginPath(); ctx.arc(n.x, n.y, halo, 0, 6.2832); ctx.fill();
-
-      ctx.fillStyle = (n.kind === 'hid' && !n.cv)
-        ? 'rgba(146,144,138,' + (0.75 * n.app) + ')'
-        : 'rgba(242,241,238,' + (0.95 * n.app) + ')';
-      ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 6.2832); ctx.fill();
-
-      if (n.cv) {
-        ctx.strokeStyle = 'rgba(231,227,217,' + (0.6 * n.app) + ')';
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.arc(n.x, n.y, r + 7 + Math.sin(t * 1.8) * 1.8, 0, 6.2832); ctx.stroke();
-      }
-
-      if (n.kind === 'in') {
-        ctx.strokeStyle = 'rgba(231,227,217,' + (0.5 * n.app) + ')';
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.arc(n.x, n.y, r + 9 + Math.sin(t * 1.4) * 2.5, 0, 6.2832); ctx.stroke();
-      }
-    });
-
-    buttons.forEach(function (b, i) {
-      var n = nodes[OUT0 + i];
-      if (n && n.app > 0.55) b.classList.add('on');
-    });
-
-    if (cvBtn && nodes[CVN] && nodes[CVN].app > 0.55) cvBtn.classList.add('on');
-
-    if (!REDUCED && Math.random() < 0.05 && pulses.length < 26 && t > 1.4) {
-      spawn(edges[Math.floor(Math.random() * edges.length)]);
-    }
-
-    requestAnimationFrame(draw);
-  }
-
-  function startStage() {
-    if (stageOn) return;
-    stageOn = true;
-    build();
-    start = performance.now();
-    requestAnimationFrame(draw);
-  }
-
-  /* ---------- events ---------- */
   var rt;
   window.addEventListener('resize', function () {
     clearTimeout(rt);
-    rt = setTimeout(function () {
-      if (stageOn) build();
-      if (!finished) buildOverture();
-    }, 140);
+    rt = setTimeout(function () { if (!finished) buildOverture(); }, 140);
   });
-
-  stage.addEventListener('pointermove', function (e) {
-    var r = stage.getBoundingClientRect();
-    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = true;
-  });
-  stage.addEventListener('pointerleave', function () { mouse.on = false; });
 
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) { if (en.isIntersecting) en.target.classList.add('vis'); });
   }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
-
-  var bar = document.getElementById('bar');
-  new IntersectionObserver(function (entries) {
-    bar.classList.toggle('show', !entries[0].isIntersecting);
-  }, { threshold: 0.15 }).observe(stage);
 
   var links = {};
   Array.prototype.forEach.call(document.querySelectorAll('.bar a[data-id]'), function (a) {
@@ -1204,8 +810,8 @@ footer span { font-family: var(--mono); font-size: 0.58rem; color: var(--accent-
     Object.keys(links).forEach(function (id) { links[id].classList.toggle('active', id === best); });
   }, { threshold: [0, 0.15, 0.4, 0.75], rootMargin: '-15% 0px -45% 0px' });
 
-  SECTIONS.forEach(function (s) {
-    var el = document.getElementById(s.id);
+  SECTION_IDS.forEach(function (id) {
+    var el = document.getElementById(id);
     if (el) spy.observe(el);
   });
 
